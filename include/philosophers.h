@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 12:46:57 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:16:38 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	int		index;
 	int		index_next;
 	int		eat_count;
+	int		must_eat;
 	void	*prog;
 }	t_philo;
 

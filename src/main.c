@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 12:54:21 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:36:59 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void philo_wanna_eat(t_philo *philo, t_prog *prog)
 	first = ft_lower(philo->index, philo->index_next);
 	second = ft_bigger(philo->index, philo->index_next);
 	while (1)
-	{
+ 	{
 		pthread_mutex_lock(prog->mutexes.fork_availability);
 		if (prog->mutexes.bool_forks[first] == 0 && prog->mutexes.bool_forks[second] == 0)
 		{
@@ -61,7 +61,9 @@ void philo_wanna_eat(t_philo *philo, t_prog *prog)
 			prog->mutexes.bool_forks[second] = 1;
 			pthread_mutex_unlock(prog->mutexes.fork_availability);
 			pthread_mutex_lock(&prog->mutexes.forks[first]);
+			printf("%li %i has taken a fork\n", (get_time_mls() - prog->start_time), philo->nbr);
 			pthread_mutex_lock(&prog->mutexes.forks[second]);
+			printf("%li %i has taken a fork\n", (get_time_mls() - prog->start_time), philo->nbr);
 			philo->eat_count++;
 			if (is_priority(prog, philo) && philo->eat_count == 1)
 			{
@@ -77,12 +79,15 @@ void philo_wanna_eat(t_philo *philo, t_prog *prog)
 			pthread_mutex_unlock(prog->mutexes.fork_availability);
 			pthread_mutex_unlock(&prog->mutexes.forks[first]);
 			pthread_mutex_unlock(&prog->mutexes.forks[second]);
-			break;
+			if (prog->params.nbr_must_eat != -1 && philo->eat_count == philo->must_eat)
+				break;
+			printf("%li %i is sleeping\n", (get_time_mls() - prog->start_time), philo->nbr);
+			usleep(prog->params.time_to_sleep * 1000);
 		}
 		else
 		{
 			pthread_mutex_unlock(prog->mutexes.fork_availability);
-			usleep(1000); //Replace this shit by a proper line or shit like that
+			usleep(500); //Replace this shit by a proper line or shit like that, or maybe reduce time
 		}
 	}
 }
@@ -107,7 +112,7 @@ void	*philo_thread(void *data)
 			else
 			{
 				pthread_mutex_unlock(prog->mutexes.change_priority_count);
-				usleep(1000); //Replace this shit by a proper line or shit like that
+				usleep(500); //Replace this shit by a proper line or shit like that, or maybe reduce time
 			}
 		}
 	}
@@ -159,6 +164,8 @@ int	philo_init(t_prog *prog, t_philo *philo, int i)
 	philo->nbr = i + 1;
 	philo->eat_count = 0;
 	philo->prog = prog;
+	if (prog->params.nbr_must_eat != -1)
+		philo->must_eat = prog->params.nbr_must_eat;
 	philo->index = i;
 	if (i == (prog->params.nbr_philos - 1))
 		philo->index_next = 0;
