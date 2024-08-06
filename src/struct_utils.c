@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 12:46:36 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 13:58:50 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,21 +45,17 @@ long int	get_time_mls(void)
 
 int	struct_malloc(t_prog *prog)
 {
-	int i;
-
 	if (!prog)
-		return (0);
-	prog->mutexes.forks = malloc(sizeof(pthread_mutex_t) * prog->params.nbr_philos);
-	prog->threads = malloc(sizeof(pthread_t) * prog->params.nbr_philos);
+		return (print_error("Error on struct_malloc function call\n"));
+	prog->mutexes.forks = custom_calloc(sizeof(pthread_mutex_t), prog->params.nbr_philos);
+	prog->threads = custom_calloc(sizeof(pthread_t), prog->params.nbr_philos);
 	prog->philos = malloc(sizeof(t_philo) * prog->params.nbr_philos);
-	prog->mutexes.bool_forks = malloc(sizeof(int) * (prog->params.nbr_philos));
+	prog->mutexes.bool_forks = custom_calloc(sizeof(int), (prog->params.nbr_philos));
 	prog->mutexes.fork_availability = malloc(sizeof(pthread_mutex_t));
 	prog->mutexes.change_priority_count = malloc(sizeof(pthread_mutex_t));
 	if (!prog->threads || !prog->mutexes.forks || !prog->philos  || \
 	!prog->mutexes.bool_forks || !prog->mutexes.fork_availability || !prog->mutexes.change_priority_count)
 		return (print_error("Error: Malloc failure\n"));
-	i = 0;
-	while (i < prog->params.nbr_philos)
-		prog->mutexes.bool_forks[i++] = 0;
 	return (1);
 }
+
