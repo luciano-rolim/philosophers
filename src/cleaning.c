@@ -6,14 +6,13 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 13:52:46 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:46:15 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-
-void	clean_threads(t_prog *prog)
+static void	clean_threads(t_prog *prog)
 {
 	int	i;
 
@@ -27,7 +26,8 @@ void	clean_threads(t_prog *prog)
 	}
 	free(prog->threads);
 }
-void	clean_forks(t_prog *prog)
+
+static void	clean_forks(t_prog *prog)
 {
 	int	i;
 
@@ -42,28 +42,37 @@ void	clean_forks(t_prog *prog)
 	free(prog->mutexes.forks);
 }
 
+static void	clean_and_free_mutex(pthread_mutex_t *mutex)
+{
+	if (!mutex)
+		return ;
+	pthread_mutex_destroy(mutex);
+	free(mutex);
+}
+
+static void	clean_mutexes(t_prog *prog)
+{
+	if (!prog)
+		return ;
+	if (prog->mutexes.forks)
+		clean_forks(prog);
+	if (prog->mutexes.fork_availability)
+		clean_and_free_mutex(prog->mutexes.fork_availability);
+	if (prog->mutexes.eat_first_count)
+		clean_and_free_mutex(prog->mutexes.eat_first_count);
+}
+
 void	clean_prog(t_prog *prog, char *message)
 {
 	if (!prog)
 		return ;
 	if (prog->threads)
 		clean_threads(prog);
-	if (prog->mutexes.forks)
-		clean_forks(prog);
+	clean_mutexes(prog);
 	if (prog->philos)
 		free(prog->philos);
 	if (prog->mutexes.bool_forks)
 		free(prog->mutexes.bool_forks);
-	if (prog->mutexes.fork_availability) //increment custom function when more mutexes
-	{
-		pthread_mutex_destroy(prog->mutexes.fork_availability);
-		free(prog->mutexes.fork_availability);
-	}
-	if (prog->mutexes.change_priority_count) //increment custom function when more mutexes
-	{
-		pthread_mutex_destroy(prog->mutexes.change_priority_count);
-		free(prog->mutexes.change_priority_count);
-	}
 	if (message)
 		printf("%s\n", message);
 }

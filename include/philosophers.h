@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 14:16:38 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:02:39 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo
 	int		index_next;
 	int		eat_count;
 	int		must_eat;
+	int		is_thinking;
 	void	*prog;
 }	t_philo;
 
@@ -49,7 +50,7 @@ typedef struct s_params
 typedef struct s_mutexes
 {
 	pthread_mutex_t *fork_availability;
-	pthread_mutex_t *change_priority_count;
+	pthread_mutex_t *eat_first_count;
 	pthread_mutex_t	*forks;
 	int				*bool_forks;
 }	t_mutexes;
@@ -61,28 +62,42 @@ typedef struct s_prog
 	pthread_t		*threads;
 	t_philo			*philos;
 	int				all_alive;
-	int				priority_line_count;
-	long int		start_time;
+	int				eat_first_line;
+	long int		strt_tm;
 }	t_prog;
 
-//Check functions
+//Arg check functions
 int		check_arguments(t_prog *prog, int argc, char **argv);
 
-//Struct Utils functions
-int			philo_struct(t_prog *prog, int nbr, int arg);
-long int	get_time_mls(void);
-int			struct_malloc(t_prog *prog);
-
 //Basic Utils functions
-int			is_num_digit(char c);
 int			string_len(char *s);
 int			char_cmp(char *s1, char *s2);
-long int	custom_atol(char *str_number);
-int			is_even(int nbr);
-int			print_error(char *message);
-void		*custom_calloc(size_t nmemb, size_t size);
 
 //Cleaning functions
 void		clean_prog(t_prog *prog, char *message);
+
+//Num functions
+long int	custom_atol(char *str_number);
+int			is_even(int nbr);
+int			ft_bigger(int a, int b);
+int			ft_lower(int a, int b);
+int			is_num_digit(char c);
+
+//Program utils
+int			param_attribution(t_prog *prog, int nbr, int arg);
+int			print_error(char *message);
+void		*print_error_pointer(char *message);
+void		*ft_calloc(size_t nmemb, size_t size);
+
+//Start variables functions
+int			start_variables(t_prog *prog);
+
+//Thread functions
+void	*philo_thread(void *data);
+
+//Time functions
+long int	time_mls(void);
+long int	timestamp(t_prog *prog);
+
 
 #endif

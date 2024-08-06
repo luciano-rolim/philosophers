@@ -6,16 +6,16 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 12:46:57 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:40:45 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static char *check_plus_and_zero(char *number)
+static char	*check_plus_and_zero(char *number)
 {
-	int i;
-	int non_zero;
+	int	i;
+	int	non_zero;
 
 	if (!number)
 		return (NULL);
@@ -39,7 +39,7 @@ static char *check_plus_and_zero(char *number)
 	return (number);
 }
 
-static int process_arg(t_prog *prog, char *str_number, int arg)
+static int	process_arg(t_prog *prog, char *str_number, int arg)
 {
 	long int	nbr;
 
@@ -53,12 +53,12 @@ static int process_arg(t_prog *prog, char *str_number, int arg)
 	nbr = custom_atol(str_number);
 	if (nbr > INT_MAX || nbr < 0)
 		return (0);
-	if (!philo_struct(prog, nbr, arg))
+	if (!param_attribution(prog, nbr, arg))
 		return (0);
 	return (1);
 }
 
-static int first_check(int argc, char **argv, int *n_to_check)
+static int	first_check(int argc, char **argv, int *n_to_check)
 {
 	if (!n_to_check)
 		return (0);
@@ -73,20 +73,19 @@ static int first_check(int argc, char **argv, int *n_to_check)
 	return (1);
 }
 
-int initialize_variables(t_prog *prog)
+static int	initialize_variables(t_prog *prog)
 {
 	if (!prog)
 		return (print_error("Error on initialize variables call\n"));
-
 	prog->threads = NULL;
 	prog->philos = NULL;
 	prog->all_alive = 1;
-	prog->priority_line_count = -1;
-	prog->start_time = -1;
+	prog->eat_first_line = -1;
+	prog->strt_tm = -1;
 	prog->mutexes.bool_forks = NULL;
 	prog->mutexes.forks = NULL;
 	prog->mutexes.fork_availability = NULL;
-	prog->mutexes.change_priority_count = NULL;
+	prog->mutexes.eat_first_count = NULL;
 	prog->params.nbr_philos = -1;
 	prog->params.time_to_die = -1;
 	prog->params.time_to_eat = -1;
@@ -95,11 +94,11 @@ int initialize_variables(t_prog *prog)
 	return (1);
 }
 
-int check_arguments(t_prog *prog, int argc, char **argv)
+int	check_arguments(t_prog *prog, int argc, char **argv)
 {
-	int i;
-	int n_to_check;
-	char *tmp_message;
+	int		i;
+	int		n_to_check;
+	char	*tmp_message;
 
 	if (!first_check(argc, argv, &n_to_check))
 		return (0);
