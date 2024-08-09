@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 15:31:33 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/09 13:59:41 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,7 @@ int	main(int argc, char **argv)
 	printf("Simulation finished\n");
 	return (EXIT_SUCCESS);
 }
+
+//Ideias to improve performance
+//Possibility to create a quickly sub-thread to perform paralell actions while eating or thinking, like to add in queue, remove from queue and shit
+//ver melhor quando começar e terminar os locks

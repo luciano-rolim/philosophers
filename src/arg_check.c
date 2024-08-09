@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 15:40:45 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:48:32 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,17 @@ static int	initialize_variables(t_prog *prog)
 	prog->mutexes.forks = NULL;
 	prog->mutexes.fork_availability = NULL;
 	prog->mutexes.eat_first_count = NULL;
+	prog->mutexes.queue = NULL;
 	prog->params.nbr_philos = -1;
 	prog->params.time_to_die = -1;
 	prog->params.time_to_eat = -1;
 	prog->params.time_to_sleep = -1;
 	prog->params.nbr_must_eat = -1;
+	prog->queue.arr = NULL;
+	prog->queue.beggining = 0;
+	prog->queue.ending = 0;
+	prog->queue.size = 0;
+	prog->queue.arr_last = 0;
 	return (1);
 }
 

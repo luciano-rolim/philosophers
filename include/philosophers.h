@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 16:02:39 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/09 14:11:31 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@
 typedef struct s_philo
 {
 	int		nbr;
+	int		prev;
+	int		next;
 	int		index;
 	int		index_next;
 	int		eat_count;
 	int		must_eat;
 	int		is_thinking;
+	int		on_queue;
 	void	*prog;
 }	t_philo;
 
@@ -51,9 +54,19 @@ typedef struct s_mutexes
 {
 	pthread_mutex_t *fork_availability;
 	pthread_mutex_t *eat_first_count;
+	pthread_mutex_t	*queue;
 	pthread_mutex_t	*forks;
 	int				*bool_forks;
 }	t_mutexes;
+
+typedef struct s_queue
+{
+	int	*arr;
+	int	arr_last;
+	int	beggining;
+	int	ending;
+	int	size;
+}	t_queue ;
 
 typedef struct s_prog
 {
@@ -61,6 +74,7 @@ typedef struct s_prog
 	t_mutexes		mutexes;
 	pthread_t		*threads;
 	t_philo			*philos;
+	t_queue			queue;
 	int				all_alive;
 	int				eat_first_line;
 	long int		strt_tm;

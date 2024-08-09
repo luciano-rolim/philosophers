@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 15:46:15 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/09 12:16:49 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static void	clean_mutexes(t_prog *prog)
 		clean_and_free_mutex(prog->mutexes.fork_availability);
 	if (prog->mutexes.eat_first_count)
 		clean_and_free_mutex(prog->mutexes.eat_first_count);
+	if (prog->mutexes.queue)
+		clean_and_free_mutex(prog->mutexes.queue);
 }
 
 void	clean_prog(t_prog *prog, char *message)
@@ -73,6 +75,8 @@ void	clean_prog(t_prog *prog, char *message)
 		free(prog->philos);
 	if (prog->mutexes.bool_forks)
 		free(prog->mutexes.bool_forks);
+	if (prog->queue.arr)
+		free(prog->queue.arr);
 	if (message)
 		printf("%s\n", message);
 }
