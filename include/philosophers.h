@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/09 14:11:31 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:00:39 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_prog
 }	t_prog;
 
 //Arg check functions
-int		check_arguments(t_prog *prog, int argc, char **argv);
+int			check_arguments(t_prog *prog, int argc, char **argv);
 
 //Basic Utils functions
 int			string_len(char *s);
@@ -103,11 +103,15 @@ int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
 
+//Queue functions
+int			add_to_queue(t_prog *prog, t_philo *philo);
+int			remove_from_queue(t_prog *prog, t_philo *philo);
+
 //Start variables functions
 int			start_variables(t_prog *prog);
 
 //Thread functions
-void	*philo_thread(void *data);
+void		*philo_thread(void *data);
 
 //Time functions
 long int	time_mls(void);
