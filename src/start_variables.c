@@ -37,6 +37,10 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	else
 		philo->index_next = i + 1;
 	eat_first_priority(prog, philo);
+	philo->grab_first = ft_lower(philo->index, philo->index_next);
+	philo->grab_second = ft_bigger(philo->index, philo->index_next);
+	philo->bool_1 = &prog->mutexes.bool_forks[philo->grab_first];
+	philo->bool_2 = &prog->mutexes.bool_forks[philo->grab_second];
 	return (1);
 }
 
@@ -62,6 +66,8 @@ static int	basic_mutexes_init(t_prog *prog)
 	if (!mutex_init(prog->mutexes.eat_first_count))
 		return (0);
 	if (!mutex_init(prog->mutexes.queue))
+		return (0);
+	if (!mutex_init(prog->mutexes.printing))
 		return (0);
 	return (1);
 }
@@ -110,10 +116,11 @@ static int	mem_allocation(t_prog *prog)
 	prog->mutexes.fork_availability = malloc(m_size);
 	prog->mutexes.eat_first_count = malloc(m_size);
 	prog->mutexes.queue = malloc(m_size);
+	prog->mutexes.printing = malloc(m_size);
 	if (!prog->threads || !prog->mutexes.forks || !prog->philos \
 	|| !prog->mutexes.bool_forks || !prog->mutexes.fork_availability \
 	|| !prog->mutexes.eat_first_count || !prog->mutexes.queue \
-	|| !prog->queue.arr)
+	|| !prog->queue.arr || !prog->mutexes.printing)
 		return (print_error("Error: Malloc failure\n"));
 	prog->queue.arr_last = ((prog->params.nbr_philos * 100) - 1);
 	return (1);

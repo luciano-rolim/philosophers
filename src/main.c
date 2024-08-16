@@ -56,6 +56,9 @@ int	main(int argc, char **argv)
 	return (EXIT_SUCCESS);
 }
 
-//Ideias to improve performance
-//Possibility to create a quickly sub-thread to perform paralell actions while eating or thinking, like to add in queue, remove from queue and shit
 //ver melhor quando começar e terminar os locks
+
+//ver alguma forma de inicializar as threads que nao seja com essa porra de loop while do caracas, possivelmente uma sub thread de inicializacao sei la
+//Criar porcaria do caracas para inicializar 4 threads ao mesmo tempo e assim otimizar comeco
+//MELHORAR LOGICA DAS QUEUES
+//shit scenario of only 1 philosopher

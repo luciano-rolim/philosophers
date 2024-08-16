@@ -62,6 +62,8 @@ static void	clean_mutexes(t_prog *prog)
 		clean_and_free_mutex(prog->mutexes.eat_first_count);
 	if (prog->mutexes.queue)
 		clean_and_free_mutex(prog->mutexes.queue);
+	if (prog->mutexes.printing)
+		clean_and_free_mutex(prog->mutexes.printing);
 }
 
 void	clean_prog(t_prog *prog, char *message)

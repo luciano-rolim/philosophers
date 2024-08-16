@@ -34,6 +34,10 @@ typedef struct s_philo
 	int		next;
 	int		index;
 	int		index_next;
+	int		*bool_1;
+	int		*bool_2;
+	int		grab_first;
+	int		grab_second;
 	int		eat_first_priority;
 	int		eat_count;
 	int		must_eat;
@@ -55,6 +59,7 @@ typedef struct s_mutexes
 {
 	pthread_mutex_t *fork_availability;
 	pthread_mutex_t *eat_first_count;
+	pthread_mutex_t *printing;
 	pthread_mutex_t	*queue;
 	pthread_mutex_t	*forks;
 	int				*bool_forks;
