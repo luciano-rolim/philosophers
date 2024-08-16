@@ -34,6 +34,7 @@ typedef struct s_philo
 	int		next;
 	int		index;
 	int		index_next;
+	int		eat_first_priority;
 	int		eat_count;
 	int		must_eat;
 	int		is_thinking;
@@ -102,6 +103,7 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
+int			eat_first_priority(t_prog *prog, t_philo *philo);
 
 //Queue functions
 int			add_to_queue(t_prog *prog, t_philo *philo);

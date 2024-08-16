@@ -24,15 +24,15 @@
 // 	printf("Array finished\n");
 // }
 
-int	is_priority(t_prog *prog, t_philo *philo)
-{
-	if (!prog || !philo)
-		return (-1);
-	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
-		return (0);
-	else
-		return (1);
-}
+// int	is_priority(t_prog *prog, t_philo *philo)
+// {
+// 	if (!prog || !philo)
+// 		return (-1);
+// 	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
+// 		return (0);
+// 	else
+// 		return (1);
+// }
 
 void	eating(t_prog *prog, t_philo *philo, int grab_first, int grab_second)
 {
@@ -157,7 +157,7 @@ void	philo_cicle(t_philo *philo, t_prog *prog)
 
 void	priority_line_check(t_prog *prog, t_philo *philo)
 {
-	if (!is_priority(prog, philo))
+	if (!philo->eat_first_priority)
 	{
 		while (1)
 		{

@@ -69,3 +69,14 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		((unsigned char *)ptr)[i++] = 0;
 	return (ptr);
 }
+
+int	eat_first_priority(t_prog *prog, t_philo *philo)
+{
+	if (!prog || !philo)
+		return (-1);
+	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
+		philo->eat_first_priority = 0;
+	else
+		philo->eat_first_priority = 1;
+	return (1);
+}

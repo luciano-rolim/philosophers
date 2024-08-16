@@ -36,6 +36,7 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 		philo->index_next = 0;
 	else
 		philo->index_next = i + 1;
+	eat_first_priority(prog, philo);
 	return (1);
 }
 
