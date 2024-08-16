@@ -13,10 +13,6 @@
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
-// # define ULONG_MAX_STR "18446744073709551615"
-// # define LONG_MAX_STR1 "9223372036854775807"
-// # define INT_MAX_STR "2147483647"
-
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/time.h>
@@ -123,6 +119,5 @@ void		*philo_thread(void *data);
 //Time functions
 long int	time_mls(void);
 long int	timestamp(t_prog *prog);
-
 
 #endif
