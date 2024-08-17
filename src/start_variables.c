@@ -6,11 +6,42 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/09 14:19:11 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 12:03:34 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static void calculus_wait_one_remaining(t_prog *prog, t_philo *philo)
+{
+	if (!prog || !philo)
+		return ;
+	if (prog->even_philos)
+		philo->wait_one_remaining = -1;
+	else
+	{
+		if (philo->nbr <= 2)
+			philo->wait_one_remaining = 0;
+		else if (is_even(philo->nbr) || philo->nbr == prog->params.nbr_philos)
+			philo->wait_one_remaining = ((philo->nbr / 2) - 1);
+		else
+			philo->wait_one_remaining = (philo->nbr / 2);	
+	}
+}
+static void start_position(t_prog *prog, t_philo *philo)
+{
+	if (!prog || !philo)
+		return ;
+	if (is_even(philo->nbr))
+		philo->start_position = 2;
+	else
+	{
+		if (prog->even_philos == 0 && (philo->nbr == prog->params.nbr_philos))
+			philo->start_position = 3;
+		else
+			philo->start_position = 1;
+	}
+}
 
 static int	philo_init(t_prog *prog, t_philo *philo, int i)
 {
@@ -41,6 +72,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	philo->grab_second = ft_bigger(philo->index, philo->index_next);
 	philo->bool_1 = &prog->mutexes.bool_forks[philo->grab_first];
 	philo->bool_2 = &prog->mutexes.bool_forks[philo->grab_second];
+	start_position(prog, philo);
+	calculus_wait_one_remaining(prog, philo);
 	return (1);
 }
 
@@ -130,6 +163,13 @@ int	start_variables(t_prog *prog)
 {
 	if (!prog)
 		return (print_error("Error on start variables call\n"));
+	if (is_even(prog->params.nbr_philos))
+		prog->even_philos = 1;
+	else
+	{
+		prog->even_philos = 0;
+		prog->wait_one_cicle = ((prog->params.nbr_philos - 3) / 2);
+	}
 	if (!mem_allocation(prog))
 		return (0);
 	if (!start_philos_mutexes(prog))

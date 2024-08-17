@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/09 15:00:39 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 11:24:38 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_philo
 	int		grab_first;
 	int		grab_second;
 	int		eat_first_priority;
+	int		start_position;
+	int		wait_one_remaining;
 	int		eat_count;
 	int		must_eat;
 	int		is_thinking;
@@ -79,6 +81,8 @@ typedef struct s_prog
 	t_queue			queue;
 	int				all_alive;
 	int				eat_first_line;
+	int				even_philos;
+	int				wait_one_cicle;
 	long int		strt_tm;
 }	t_prog;
 
