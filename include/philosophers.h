@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 11:24:38 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:44:41 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,23 @@
 typedef struct s_philo
 {
 	int		nbr;
-	int		prev;
-	int		next;
+	// int		prev;
+	// int		next;
 	int		index;
 	int		index_next;
-	int		*bool_1;
-	int		*bool_2;
+	// int		*bool_1;
+	// int		*bool_2;
 	int		grab_first;
 	int		grab_second;
-	int		eat_first_priority;
+	// int		eat_first_priority;
 	int		start_position;
 	int		wait_one_remaining;
+	int		max_wait_one_remaining;
 	int		eat_count;
 	int		must_eat;
-	int		is_thinking;
-	int		on_queue;
+	// int		is_thinking;
+	// int		on_queue;
+	int		even_prog;
 	void	*prog;
 }	t_philo;
 
@@ -108,7 +110,7 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
-int			eat_first_priority(t_prog *prog, t_philo *philo);
+// int			eat_first_priority(t_prog *prog, t_philo *philo);
 
 //Queue functions
 int			add_to_queue(t_prog *prog, t_philo *philo);

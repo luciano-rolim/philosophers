@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 12:39:27 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:42:52 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	main(int argc, char **argv)
 		clean_prog(&prog, NULL);
 		return (EXIT_FAILURE);
 	}
-	int i = 0;
+	// int i = 0;
 	// while (i < prog.params.nbr_philos)
 	// {
 	// 	printf("Philo %i has start position of %i and wait 1 remaning of %i\n", prog.philos[i].nbr, prog.philos[i].start_position, prog.philos[i].wait_one_remaining);

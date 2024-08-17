@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/06 16:02:39 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:44:08 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int	param_attribution(t_prog *prog, int nbr, int arg)
 	if (arg == 1)
 		prog->params.nbr_philos = nbr;
 	else if (arg == 2)
-		prog->params.time_to_die = nbr;
+		prog->params.time_to_die = (nbr * 1000);
 	else if (arg == 3)
-		prog->params.time_to_eat = nbr;
+		prog->params.time_to_eat = (nbr * 1000);
 	else if (arg == 4)
-		prog->params.time_to_sleep = nbr;
+		prog->params.time_to_sleep = (nbr * 1000);
 	else if (arg == 5)
 		prog->params.nbr_must_eat = nbr;
 	return (1);
@@ -70,13 +70,13 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-int	eat_first_priority(t_prog *prog, t_philo *philo)
-{
-	if (!prog || !philo)
-		return (-1);
-	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
-		philo->eat_first_priority = 0;
-	else
-		philo->eat_first_priority = 1;
-	return (1);
-}
+// int	eat_first_priority(t_prog *prog, t_philo *philo)
+// {
+// 	if (!prog || !philo)
+// 		return (-1);
+// 	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
+// 		philo->eat_first_priority = 0;
+// 	else
+// 		philo->eat_first_priority = 1;
+// 	return (1);
+// }
