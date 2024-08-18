@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 14:44:41 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:12:48 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ typedef struct s_prog
 	t_philo			*philos;
 	t_queue			queue;
 	int				all_alive;
-	int				eat_first_line;
+	// int				eat_first_line;
 	int				even_philos;
 	int				wait_one_cicle;
 	long int		strt_tm;

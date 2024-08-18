@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 11:25:51 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:12:52 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	initialize_variables(t_prog *prog)
 	prog->threads = NULL;
 	prog->philos = NULL;
 	prog->all_alive = 1;
-	prog->eat_first_line = -1;
+	// prog->eat_first_line = -1;
 	prog->strt_tm = -1;
 	prog->wait_one_cicle = -1;
 	prog->even_philos = -1;

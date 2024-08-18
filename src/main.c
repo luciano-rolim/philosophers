@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 14:42:52 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:16:11 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,11 @@
 static int	start_program(t_prog *prog)
 {
 	int				i;
-	int				function_return;
 
+	i = -1;
 	prog->strt_tm = time_mls();
-	if (prog->strt_tm == -1)
-		return (print_error("Error getting start time\n"));
-	prog->eat_first_line = (prog->params.nbr_philos / 2);
-	i = 0;
-	function_return = -1;
-	while (i < prog->params.nbr_philos)
-	{
-		function_return = pthread_create(&prog->threads[i], NULL, \
-		philo_thread, (void *)&prog->philos[i]);
-		if (function_return != 0)
-			return (print_error("Pthread_create failure\n"));
-		i++;
-	}
+	while (++i < prog->params.nbr_philos)
+		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
 	return (1);
 }
 
@@ -66,5 +55,4 @@ int	main(int argc, char **argv)
 
 //ver alguma forma de inicializar as threads que nao seja com essa porra de loop while do caracas, possivelmente uma sub thread de inicializacao sei la
 //Criar porcaria do caracas para inicializar 4 threads ao mesmo tempo e assim otimizar comeco
-//MELHORAR LOGICA DAS QUEUES
 //shit scenario of only 1 philosopher

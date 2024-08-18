@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 14:45:04 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/17 14:56:21 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	if (!prog || !philo)
 		return (print_error("Error on philo_init call\n"));
 	philo->nbr = i + 1;
-	// if (philo->nbr == prog->params.nbr_philos)
-	// 	philo->next = 1;	
-	// else
-	// 	philo->next = (philo->nbr + 1);
-	// if (philo->nbr == 1)
-	// 	philo->prev = prog->params.nbr_philos;
-	// else
-	// 	philo->prev = (philo->nbr - 1);
 	philo->eat_count = 0;
 	philo->prog = prog;
-	// philo->is_thinking = 0;
-	// philo->on_queue = 0;
 	if (prog->params.nbr_must_eat != -1)
 		philo->must_eat = prog->params.nbr_must_eat;
 	philo->index = i;
@@ -73,11 +63,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 		philo->index_next = 0;
 	else
 		philo->index_next = i + 1;
-	// eat_first_priority(prog, philo);
 	philo->grab_first = ft_lower(philo->index, philo->index_next);
 	philo->grab_second = ft_bigger(philo->index, philo->index_next);
-	// philo->bool_1 = &prog->mutexes.bool_forks[philo->grab_first];
-	// philo->bool_2 = &prog->mutexes.bool_forks[philo->grab_second];
 	start_position(prog, philo);
 	calculus_wait_one_remaining(prog, philo);
 	return (1);
