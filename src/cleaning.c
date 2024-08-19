@@ -56,12 +56,12 @@ static void	clean_mutexes(t_prog *prog)
 		return ;
 	if (prog->mutexes.forks)
 		clean_forks(prog);
-	if (prog->mutexes.fork_availability)
-		clean_and_free_mutex(prog->mutexes.fork_availability);
+	// if (prog->mutexes.fork_availability)
+	// 	clean_and_free_mutex(prog->mutexes.fork_availability);
 	if (prog->mutexes.eat_first_count)
 		clean_and_free_mutex(prog->mutexes.eat_first_count);
-	if (prog->mutexes.queue)
-		clean_and_free_mutex(prog->mutexes.queue);
+	if (prog->mutexes.all_alive)
+		clean_and_free_mutex(prog->mutexes.all_alive);
 	if (prog->mutexes.printing)
 		clean_and_free_mutex(prog->mutexes.printing);
 }
@@ -75,8 +75,8 @@ void	clean_prog(t_prog *prog, char *message)
 	clean_mutexes(prog);
 	if (prog->philos)
 		free(prog->philos);
-	if (prog->mutexes.bool_forks)
-		free(prog->mutexes.bool_forks);
+	// if (prog->mutexes.bool_forks)
+	// 	free(prog->mutexes.bool_forks);
 	if (prog->queue.arr)
 		free(prog->queue.arr);
 	if (message)

@@ -45,9 +45,7 @@ int	main(int argc, char **argv)
 		clean_prog(&prog, NULL);
 		return (EXIT_FAILURE);
 	}
-	usleep(500000);
 	clean_prog(&prog, NULL);
-	printf("Simulation finished\n");
 	return (EXIT_SUCCESS);
 }
 

@@ -14,21 +14,14 @@
 
 long int	time_mls(void)
 {
-	struct timeval	tmp_time;
-	// int				get_time_result;
-	// long int		time_in_miliseconds;
+	struct timeval tmp_time;
 
-	// get_time_result = -1;
-	// get_time_result = 
 	gettimeofday(&tmp_time, NULL);
-	// if (get_time_result != 0)
-	// 	return (print_error("Error on gettimeofday function\n"));
 	return ((tmp_time.tv_sec * 1000) + (tmp_time.tv_usec / 1000));
 }
 
-long int	timestamp(t_prog *prog)
+long int	simulation_timestamp(struct timeval tmp_time, long int start_time)
 {
-	// if (!prog)
-	// 	return (-1);
-	return (time_mls() - prog->strt_tm);
+ 	gettimeofday(&tmp_time, NULL);
+	return (((tmp_time.tv_sec * 1000) + (tmp_time.tv_usec / 1000)) - start_time);
 }

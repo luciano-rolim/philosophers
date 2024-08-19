@@ -25,25 +25,23 @@
 
 typedef struct s_philo
 {
-	int		nbr;
-	// int		prev;
-	// int		next;
-	int		index;
-	int		index_next;
-	// int		*bool_1;
-	// int		*bool_2;
-	int		grab_first;
-	int		grab_second;
-	// int		eat_first_priority;
-	int		start_position;
-	int		wait_one_remaining;
-	int		max_wait_one_remaining;
-	int		eat_count;
-	int		must_eat;
-	// int		is_thinking;
-	// int		on_queue;
-	int		even_prog;
-	void	*prog;
+	int				nbr;
+	int				index;
+	int				index_next;
+	int				grab_first;
+	int				grab_second;
+	int				start_position;
+	int				wait_one_remaining;
+	int				max_wait_one_remaining;
+	int				eat_count;
+	int				must_eat;
+	int				alive;
+	int				last_meal;
+	int				even_prog;
+	void			*prog;
+	long int		strt_tm;
+	int				time_to_die;
+	struct timeval	tmp_time;
 }	t_philo;
 
 typedef struct s_params
@@ -57,12 +55,13 @@ typedef struct s_params
 
 typedef struct s_mutexes
 {
-	pthread_mutex_t *fork_availability;
+	// pthread_mutex_t *fork_availability;
 	pthread_mutex_t *eat_first_count;
 	pthread_mutex_t *printing;
-	pthread_mutex_t	*queue;
+	// pthread_mutex_t	*queue;
+	pthread_mutex_t	*all_alive;
 	pthread_mutex_t	*forks;
-	int				*bool_forks;
+	// int				*bool_forks;
 }	t_mutexes;
 
 typedef struct s_queue
@@ -121,9 +120,10 @@ int			start_variables(t_prog *prog);
 
 //Thread functions
 void		*philo_thread(void *data);
+void		death_calculus(t_prog *prog, t_philo *philo);
 
 //Time functions
 long int	time_mls(void);
-long int	timestamp(t_prog *prog);
+long int	simulation_timestamp(struct timeval tmp_time, long int start_time);
 
 #endif

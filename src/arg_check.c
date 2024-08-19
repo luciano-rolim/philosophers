@@ -84,12 +84,10 @@ static int	initialize_variables(t_prog *prog)
 	prog->strt_tm = -1;
 	prog->wait_one_cicle = -1;
 	prog->even_philos = -1;
-	prog->mutexes.bool_forks = NULL;
 	prog->mutexes.forks = NULL;
 	prog->mutexes.printing = NULL;
-	prog->mutexes.fork_availability = NULL;
+	prog->mutexes.all_alive = NULL;
 	prog->mutexes.eat_first_count = NULL;
-	prog->mutexes.queue = NULL;
 	prog->params.nbr_philos = -1;
 	prog->params.time_to_die = -1;
 	prog->params.time_to_eat = -1;

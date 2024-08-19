@@ -12,33 +12,47 @@
 
 #include "../include/philosophers.h"
 
-void	eating_action(t_prog *prog, t_philo *philo)
+int	eating_action(t_prog *prog, t_philo *philo)
 {
 	pthread_mutex_lock(&prog->mutexes.forks[philo->grab_first]);
 	pthread_mutex_lock(&prog->mutexes.forks[philo->grab_second]);
-	//pthread_mutex_lock(prog->mutexes.printing);
-	printf("%li %i has taken a fork\n", timestamp(prog), philo->nbr);
-	printf("%li %i has taken a fork\n", timestamp(prog), philo->nbr);
-	printf("%li %i is eating\n", timestamp(prog), philo->nbr);
-	//pthread_mutex_unlock(prog->mutexes.printing);
+	pthread_mutex_lock(prog->mutexes.printing);
+	if (!prog->all_alive)
+	{
+		pthread_mutex_unlock(prog->mutexes.printing);
+		pthread_mutex_unlock(&prog->mutexes.forks[philo->grab_first]);
+		pthread_mutex_unlock(&prog->mutexes.forks[philo->grab_second]);
+		return (0);
+	}
+	printf("%li %i has taken a fork\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	printf("%li %i has taken a fork\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	printf("%li %i is eating\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	pthread_mutex_unlock(prog->mutexes.printing);
 	philo->eat_count++;
 	usleep(prog->params.time_to_eat);
 	pthread_mutex_unlock(&prog->mutexes.forks[philo->grab_first]);
 	pthread_mutex_unlock(&prog->mutexes.forks[philo->grab_second]);
+	return (1);
 }
 
-void think_action(t_prog *prog, t_philo *philo)
+int	think_action(t_prog *prog, t_philo *philo)
 {
-	//pthread_mutex_lock(prog->mutexes.printing);
-	printf("%li %i is thinking\n", timestamp(prog), philo->nbr);
-	//pthread_mutex_unlock(prog->mutexes.printing);
+	pthread_mutex_lock(prog->mutexes.printing);
+	if (!prog->all_alive)
+	{
+		pthread_mutex_unlock(prog->mutexes.printing);
+		return (0);
+	}
+	printf("%li %i is thinking\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	pthread_mutex_unlock(prog->mutexes.printing);
+	return (1);
 }
 
 void sleep_action(t_prog *prog, t_philo *philo)
 {
-	//pthread_mutex_lock(prog->mutexes.printing);
-	printf("%li %i is sleeping\n", timestamp(prog), philo->nbr);
-	//pthread_mutex_unlock(prog->mutexes.printing);
+	pthread_mutex_lock(prog->mutexes.printing);
+	printf("%li %i is sleeping\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	pthread_mutex_unlock(prog->mutexes.printing);
 	usleep(prog->params.time_to_sleep);
 }
 
@@ -69,11 +83,12 @@ void	odd_thinking(t_prog *prog, t_philo *philo)
 	//again, stupid shit of wheter sleep is bigger or even equal to eat, what to do in each scenario	
 }
 
-void	philo_cicle(t_philo *philo, t_prog *prog)
+int	philo_cicle(t_philo *philo, t_prog *prog)
 {
 	while (1)
 	{
-		eating_action(prog, philo);
+		if (!eating_action(prog, philo))
+			return (0);
 		if (prog->params.nbr_must_eat != -1 && philo->eat_count == philo->must_eat)
 			break ;
 		sleep_action(prog, philo);
@@ -82,6 +97,26 @@ void	philo_cicle(t_philo *philo, t_prog *prog)
 		else
 			odd_thinking(prog, philo);
 	}
+	return (1);
+}
+
+void	death_calculus(t_prog *prog, t_philo *philo)
+{
+	if ((simulation_timestamp(philo->tmp_time, philo->strt_tm) - philo->last_meal) >= philo->time_to_die)
+	{
+		pthread_mutex_lock(prog->mutexes.printing);
+		pthread_mutex_lock(prog->mutexes.all_alive);
+		if (!prog->all_alive)
+		{
+			pthread_mutex_unlock(prog->mutexes.all_alive);	
+			pthread_mutex_unlock(prog->mutexes.printing);
+			return ;
+		}
+		prog->all_alive = 0;
+		pthread_mutex_unlock(prog->mutexes.all_alive);
+		printf("%li %i died\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+		pthread_mutex_unlock(prog->mutexes.printing);
+	}
 }
 
 void	*philo_thread(void *data)
@@ -89,19 +124,22 @@ void	*philo_thread(void *data)
 	t_philo	*philo;
 	t_prog	*prog;
 
-	// if (!data)
-	// 	return (print_error_pointer("Thread Error: data pointer is NULL\n"));
 	philo = (t_philo *)data;
 	prog = (t_prog *)(philo->prog);
+	philo->strt_tm = prog->strt_tm;
+	philo->last_meal = 0;
+	death_calculus(prog, philo);
 	if (philo->start_position == 2)
 	{
-		think_action(prog, philo);
+		if (!think_action(prog, philo))
+			return (NULL);
 		usleep(prog->params.time_to_eat - 1000);
 	}
 	else if (philo->start_position == 3)
 	{
-		think_action(prog, philo);
-		usleep((prog->params.time_to_eat * 2) - 1000);			
+		if(!think_action(prog, philo))
+			return (NULL);
+		usleep((prog->params.time_to_eat * 2) - 1000);
 	}
 	philo_cicle(philo, prog);
 	return (NULL);
