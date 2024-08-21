@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 15:16:11 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/21 12:53:58 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static int	start_program(t_prog *prog)
 {
 	int				i;
-
 	i = -1;
-	prog->strt_tm = time_mls();
+
+	prog->strt_tm = (time_mls() + 100);
 	while (++i < prog->params.nbr_philos)
 		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
 	return (1);
@@ -54,3 +54,4 @@ int	main(int argc, char **argv)
 //ver alguma forma de inicializar as threads que nao seja com essa porra de loop while do caracas, possivelmente uma sub thread de inicializacao sei la
 //Criar porcaria do caracas para inicializar 4 threads ao mesmo tempo e assim otimizar comeco
 //shit scenario of only 1 philosopher
+//add stuff to not allow more than 250 philosophers 

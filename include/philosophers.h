@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 15:12:48 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/21 15:22:59 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ typedef struct s_philo
 	int				nbr;
 	int				index;
 	int				index_next;
-	int				grab_first;
-	int				grab_second;
+	pthread_mutex_t	*grab_first;
+	pthread_mutex_t	*grab_second;
 	int				start_position;
 	int				wait_one_remaining;
 	int				max_wait_one_remaining;
@@ -41,6 +41,11 @@ typedef struct s_philo
 	void			*prog;
 	long int		strt_tm;
 	int				time_to_die;
+	int				*all_alive;
+	int				eat_ending_set;
+	pthread_mutex_t *mutex_all_alive;
+	pthread_mutex_t *mutex_print;
+	int				forks[2];
 	struct timeval	tmp_time;
 }	t_philo;
 
@@ -97,7 +102,7 @@ int			char_cmp(char *s1, char *s2);
 //Cleaning functions
 void		clean_prog(t_prog *prog, char *message);
 
-//Num functions
+//Num functions	return ();
 long int	custom_atol(char *str_number);
 int			is_even(int nbr);
 int			ft_bigger(int a, int b);
