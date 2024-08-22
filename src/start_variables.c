@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 11:09:35 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:59:31 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	grab_fork_order(t_prog *prog, t_philo *philo)
 			philo->grab_second = &prog->mutexes.forks[0];			
 		else
 			philo->grab_second = &prog->mutexes.forks[philo->index_next];
-	}	
+	}
 }
 
 static int	philo_init(t_prog *prog, t_philo *philo, int i)
@@ -96,6 +96,7 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	philo->all_alive = &prog->all_alive;
 	philo->mutex_print = &prog->mutexes.printing;
 	philo->mutex_all_alive = &prog->mutexes.all_alive;
+	pthread_mutex_init(&philo->mutex_last_meal, NULL);
 	return (1);
 }
 

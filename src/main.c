@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 14:45:15 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:50:42 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static int	start_program(t_prog *prog)
 	i = -1;
 
 	prog->strt_tm = (time_mls() + 400); //STRONG TESTS FOR 200
+	pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	while (++i < prog->params.nbr_philos)
 		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
-	// pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	// evens = (prog->params.nbr_philos / 2);
 
 	// "Philo %i is thinking\n";

@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 13:03:42 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 15:59:22 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	int				time_to_sleep;
 	int				*all_alive;
 	int				eat_ending_set;
+	pthread_mutex_t	mutex_last_meal;
 	pthread_mutex_t *mutex_all_alive;
 	pthread_mutex_t *mutex_print;
 	int				forks[2];
@@ -74,6 +75,7 @@ typedef struct s_prog
 	pthread_t		*threads;
 	t_philo			*philos;
 	pthread_t		death_checker;
+	int				eat_ending_set;
 	int				all_alive;
 	int				even_philos;
 	int				wait_one_cicle;
