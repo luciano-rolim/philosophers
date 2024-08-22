@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 16:13:20 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:00:07 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	custom_write(t_philo *philo, char *message)
 		return ;
 	}
 	printf("%li %i %s", simulation_timestamp(philo->strt_tm), philo->nbr, message);
-	pthread_mutex_unlock(philo->mutex_print);	
+	pthread_mutex_unlock(philo->mutex_print);
 }
 
 void	regular_think_action(t_philo *philo)
@@ -56,6 +56,7 @@ void	write_fork_eat_action(t_philo *philo)
 	if (!all_alive(philo))
 	{
 		pthread_mutex_unlock(philo->mutex_print);
+		pthread_mutex_unlock(&philo->mutex_last_meal);
 		return ;
 	}
 	philo->last_meal = simulation_timestamp(philo->strt_tm);
@@ -104,38 +105,38 @@ void	*death_thread(void *data)
 	t_prog *prog;
 	int i;
 	int	no_deaths;
-	// int	active_philos;
+	int	active_philos;
 
 	prog = (t_prog *)data;
 	no_deaths = 1;
-	// active_philos = prog->params.nbr_philos;
+	active_philos = prog->params.nbr_philos;
 	while (time_mls() < prog->strt_tm)
 		continue ;
-	while (no_deaths) 
+	while (no_deaths && active_philos)
 	{
 		i = 0;
-		// active_philos = prog->params.nbr_philos;
+		active_philos = prog->params.nbr_philos;
 		while (i < prog->params.nbr_philos)
 		{
-			// if ((prog->params.nbr_must_eat != -1) && !prog->philos[i].must_eat)
-			// 	active_philos--;
-			// else
-			// {
 			pthread_mutex_lock(&prog->philos[i].mutex_last_meal);
-			if ((simulation_timestamp(prog->strt_tm) - (prog->philos[i].last_meal)) >= (prog->params.time_to_die / 1000))
+			if ((prog->params.nbr_must_eat != -1) && !prog->philos[i].must_eat)
+				active_philos--;
+			else
 			{
-				pthread_mutex_lock(&prog->mutexes.printing);
-				pthread_mutex_lock(&prog->mutexes.all_alive);
-				prog->all_alive = 0;
-				printf("%li %i died\n", simulation_timestamp(prog->strt_tm), prog->philos[i].nbr);
-				pthread_mutex_unlock(&prog->mutexes.all_alive);
-				pthread_mutex_unlock(&prog->mutexes.printing);
-				pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
-				no_deaths = 0;
-				break;
+				if ((simulation_timestamp(prog->strt_tm) - (prog->philos[i].last_meal)) >= (prog->params.time_to_die / 1000))
+				{
+					pthread_mutex_lock(&prog->mutexes.printing);
+					pthread_mutex_lock(&prog->mutexes.all_alive);
+					prog->all_alive = 0;
+					printf("%li %i died\n", simulation_timestamp(prog->strt_tm), prog->philos[i].nbr);
+					pthread_mutex_unlock(&prog->mutexes.all_alive);
+					pthread_mutex_unlock(&prog->mutexes.printing);
+					pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
+					no_deaths = 0;
+					break;
+				}
 			}
 			pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
-			// }
 			i++;
 		}
 		usleep(1);
@@ -143,4 +144,3 @@ void	*death_thread(void *data)
 	return (NULL);
 }
 
-// //DONT DIE IF MOTHERFUCKER ALREADY ATE ALL THE SHIT
