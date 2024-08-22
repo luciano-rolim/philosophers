@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 12:17:50 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:45:15 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,9 @@
 // 	while (i <= evens);
 // 	{
 
-
-		
-
-
-
-
-
-		
 // 	}	
 // }
+
 
 static int	start_program(t_prog *prog)
 {
@@ -42,11 +35,10 @@ static int	start_program(t_prog *prog)
 	// char			*str;
 	i = -1;
 
-	prog->strt_tm = (time_mls() + 200);
+	prog->strt_tm = (time_mls() + 400); //STRONG TESTS FOR 200
 	while (++i < prog->params.nbr_philos)
 		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
-
-
+	// pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	// evens = (prog->params.nbr_philos / 2);
 
 	// "Philo %i is thinking\n";
@@ -71,12 +63,6 @@ int	main(int argc, char **argv)
 		clean_prog(&prog, NULL);
 		return (EXIT_FAILURE);
 	}
-	// int i = 0;
-	// while (i < prog.params.nbr_philos)
-	// {
-	// 	printf("Philo %i has start position of %i and wait 1 remaning of %i\n", prog.philos[i].nbr, prog.philos[i].start_position, prog.philos[i].wait_one_remaining);
-	// 	i++;
-	// }
 	if (!start_program(&prog))
 	{
 		clean_prog(&prog, NULL);
@@ -87,8 +73,6 @@ int	main(int argc, char **argv)
 }
 
 //ver melhor quando começar e terminar os locks
-
-//ver alguma forma de inicializar as threads que nao seja com essa porra de loop while do caracas, possivelmente uma sub thread de inicializacao sei la
-//Criar porcaria do caracas para inicializar 4 threads ao mesmo tempo e assim otimizar comeco
 //shit scenario of only 1 philosopher
-//add stuff to not allow more than 250 philosophers 
+//add stuff to not allow more than 250 philosophers
+//death comensal

@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 12:16:07 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:03:42 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <string.h>
 # include <signal.h>
 # include <time.h>
-# include <stdbool.h>
 
 typedef struct s_philo
 {
@@ -37,7 +36,7 @@ typedef struct s_philo
 	int				eat_count;
 	int				must_eat;
 	int				alive;
-	int				last_meal;
+	long int		last_meal;
 	int				even_prog;
 	void			*prog;
 	long int		strt_tm;
@@ -66,7 +65,6 @@ typedef struct s_mutexes
 	pthread_mutex_t printing;
 	pthread_mutex_t	all_alive;
 	pthread_mutex_t	forks[250];
-	bool			sim_stop;
 }	t_mutexes;
 
 typedef struct s_prog
@@ -75,6 +73,7 @@ typedef struct s_prog
 	t_mutexes		mutexes;
 	pthread_t		*threads;
 	t_philo			*philos;
+	pthread_t		death_checker;
 	int				all_alive;
 	int				even_philos;
 	int				wait_one_cicle;
@@ -109,6 +108,7 @@ int			start_variables(t_prog *prog);
 
 //Thread functions
 void		*philo_thread(void *data);
+void		*death_thread(void *data);
 
 //Time functions
 long int	time_mls(void);

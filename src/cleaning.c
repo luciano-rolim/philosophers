@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 10:15:24 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 14:45:29 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,12 @@ void	clean_prog(t_prog *prog, char *message)
 {
 	if (!prog)
 		return ;
+	// pthread_join(prog->death_checker, NULL);
 	if (prog->threads)
 		clean_threads(prog);
 	clean_mutexes(prog);
 	if (prog->philos)
 		free(prog->philos);
-	// if (prog->mutexes.bool_forks)
-	// 	free(prog->mutexes.bool_forks);
 	if (message)
 		printf("%s\n", message);
 }
