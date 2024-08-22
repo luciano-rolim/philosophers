@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 10:16:11 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:16:07 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ typedef struct s_philo
 	void			*prog;
 	long int		strt_tm;
 	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
 	int				*all_alive;
 	int				eat_ending_set;
 	pthread_mutex_t *mutex_all_alive;
@@ -101,17 +103,15 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
-// int			eat_first_priority(t_prog *prog, t_philo *philo);
 
 //Start variables functions
 int			start_variables(t_prog *prog);
 
 //Thread functions
 void		*philo_thread(void *data);
-void		death_calculus(t_prog *prog, t_philo *philo);
 
 //Time functions
 long int	time_mls(void);
-long int	simulation_timestamp(struct timeval tmp_time, long int start_time);
+long int	simulation_timestamp(long int start_time);
 
 #endif

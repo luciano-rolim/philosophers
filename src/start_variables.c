@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 10:18:28 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 11:09:35 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	calculus_wait_one_remaining(prog, philo);
 	philo->last_meal = 0;
 	philo->time_to_die = prog->params.time_to_die;
+	philo->time_to_eat = prog->params.time_to_eat;
+	philo->time_to_sleep = prog->params.time_to_sleep;
 	philo->all_alive = &prog->all_alive;
 	philo->mutex_print = &prog->mutexes.printing;
 	philo->mutex_all_alive = &prog->mutexes.all_alive;

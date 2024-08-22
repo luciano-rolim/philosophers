@@ -6,20 +6,57 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/21 16:39:43 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:17:50 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
+// char *thinking_start_str(t_prog *prog)
+// {
+// 	int evens;
+// 	int i;
+
+// 	evens = (prog->params.nbr_philos % 2);
+// 	if (prog->params.nbr_philos == 1)
+// 		return (NULL);
+// 	i = 1;
+// 	while (i <= evens);
+// 	{
+
+
+		
+
+
+
+
+
+		
+// 	}	
+// }
+
 static int	start_program(t_prog *prog)
 {
 	int				i;
+	// int				evens;
+	// char			*str;
 	i = -1;
 
 	prog->strt_tm = (time_mls() + 200);
 	while (++i < prog->params.nbr_philos)
 		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
+
+
+	// evens = (prog->params.nbr_philos / 2);
+
+	// "Philo %i is thinking\n";
+	// while (time_mls() < prog->strt_tm)
+	// 	continue ;
+
+	// [] = "is thinking\n"
+
+	// printf("")
+
 	return (1);
 }
 

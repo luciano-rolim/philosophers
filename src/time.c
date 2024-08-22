@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 15:37:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 15:07:53 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 12:15:34 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ long int	time_mls(void)
 	return ((tmp_time.tv_sec * 1000) + (tmp_time.tv_usec / 1000));
 }
 
-long int	simulation_timestamp(struct timeval tmp_time, long int start_time)
+long int	simulation_timestamp(long int start_time)
 {
+	struct timeval tmp_time;
+
  	gettimeofday(&tmp_time, NULL);
 	return (((tmp_time.tv_sec * 1000) + (tmp_time.tv_usec / 1000)) - start_time);
 }
