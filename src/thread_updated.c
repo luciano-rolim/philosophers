@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 17:00:07 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:09:39 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,4 +143,3 @@ void	*death_thread(void *data)
 	}
 	return (NULL);
 }
-
