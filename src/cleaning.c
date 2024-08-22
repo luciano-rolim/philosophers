@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/09 12:16:49 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:15:24 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ static void	clean_forks(t_prog *prog)
 		while (i < prog->params.nbr_philos)
 			pthread_mutex_destroy(&prog->mutexes.forks[i++]);
 	}
-	free(prog->mutexes.forks);
+	// free(prog->mutexes.forks);
 }
 
-static void	clean_and_free_mutex(pthread_mutex_t *mutex)
-{
-	if (!mutex)
-		return ;
-	pthread_mutex_destroy(mutex);
-	free(mutex);
-}
+// static void	clean_and_free_mutex(pthread_mutex_t *mutex)
+// {
+// 	if (!mutex)
+// 		return ;
+// 	pthread_mutex_destroy(mutex);
+// 	free(mutex);
+// }
 
 static void	clean_mutexes(t_prog *prog)
 {
@@ -56,14 +56,8 @@ static void	clean_mutexes(t_prog *prog)
 		return ;
 	if (prog->mutexes.forks)
 		clean_forks(prog);
-	// if (prog->mutexes.fork_availability)
-	// 	clean_and_free_mutex(prog->mutexes.fork_availability);
-	if (prog->mutexes.eat_first_count)
-		clean_and_free_mutex(prog->mutexes.eat_first_count);
-	if (prog->mutexes.all_alive)
-		clean_and_free_mutex(prog->mutexes.all_alive);
-	if (prog->mutexes.printing)
-		clean_and_free_mutex(prog->mutexes.printing);
+	pthread_mutex_destroy(&prog->mutexes.all_alive);
+	pthread_mutex_destroy(&prog->mutexes.printing);
 }
 
 void	clean_prog(t_prog *prog, char *message)
@@ -77,8 +71,6 @@ void	clean_prog(t_prog *prog, char *message)
 		free(prog->philos);
 	// if (prog->mutexes.bool_forks)
 	// 	free(prog->mutexes.bool_forks);
-	if (prog->queue.arr)
-		free(prog->queue.arr);
 	if (message)
 		printf("%s\n", message);
 }

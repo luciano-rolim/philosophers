@@ -1,8 +1,3 @@
-	// printf("Printing array after adding %i on queue\n", philo->nbr);
-	// print_array(prog, NULL);
-
-		// printf("Printing array after removing %i from queue\n", philo->nbr);
-	// print_array(prog, NULL);
 
 	//Maybe Replace both usleep(300) by some proper thing, like a line 
 // or shit like that, or maybe reduce time

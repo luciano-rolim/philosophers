@@ -6,11 +6,23 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/21 15:58:20 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:09:23 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+bool	has_simulation_stopped(t_philo *philo)
+{
+	bool	r;
+
+	r = false;
+	pthread_mutex_lock(philo->mutex_all_alive);
+	if (!*philo->all_alive)
+		r = true;
+	pthread_mutex_unlock(philo->mutex_all_alive);
+	return (r);
+}
 
 int all_alive(t_philo *philo)
 {
@@ -50,13 +62,16 @@ void	write_fork_action(t_philo *philo)
 
 void	write_fork_eat_action(t_philo *philo)
 {
+	long int	timestamp;
+
 	pthread_mutex_lock(philo->mutex_print);
 	if (!all_alive(philo))
 	{
 		pthread_mutex_unlock(philo->mutex_print);
 		return ;
 	}
-	printf("%li %i has taken a fork\n%li %i is eating\n", simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr, simulation_timestamp(philo->tmp_time, philo->strt_tm), philo->nbr);
+	timestamp = simulation_timestamp(philo->tmp_time, philo->strt_tm);
+	printf("%li %i has taken a fork\n%li %i is eating\n", timestamp, philo->nbr, timestamp, philo->nbr);
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
@@ -72,23 +87,6 @@ void	write_sleep_action(t_philo *philo)
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
-int	eat_sleep_action(t_prog *prog, t_philo *philo)
-{
-	pthread_mutex_lock(philo->grab_first);
-	write_fork_action(philo); //check for return or shit like that?
-	pthread_mutex_lock(philo->grab_second);
-	write_fork_eat_action(philo);
-	philo->eat_count++;
-	usleep(prog->params.time_to_eat);
-	pthread_mutex_unlock(philo->grab_second);
-	pthread_mutex_unlock(philo->grab_first); //test if, in case of altering the unlocking order (first second first second ao inves de first second second first) if it causes helgrind shit
-	if (philo->eat_ending_set && (philo->eat_count == philo->must_eat))
-		return (0);
-	write_sleep_action(philo);
-	usleep(prog->params.time_to_sleep);
-	return (1);
-}
-
 void	*philo_thread(void *data)
 {
 	t_philo	*philo;
@@ -100,11 +98,22 @@ void	*philo_thread(void *data)
 	delay_to_start(philo);
 	// if (philo->nbr % 2 == 0)
 	// 	think_action(philo);
-	while (all_alive(philo))
+	while (has_simulation_stopped(philo) == false)
+	// while (all_alive(philo))
 	{
-		if (!eat_sleep_action(prog, philo))
+		pthread_mutex_lock(philo->grab_first);
+		write_fork_action(philo);
+		pthread_mutex_lock(philo->grab_second);
+		write_fork_eat_action(philo);
+		philo->eat_count++;
+		usleep(prog->params.time_to_eat);
+		pthread_mutex_unlock(philo->grab_second);
+		pthread_mutex_unlock(philo->grab_first);
+		if (philo->eat_ending_set && (philo->eat_count == philo->must_eat))
 			break ;
+		write_sleep_action(philo);
+		usleep(prog->params.time_to_sleep);
 	}
-	prog = (t_prog *)(philo->prog);
 	return (NULL);
 }
+ //extra idea. use minimal malloc. put all shit on stack.

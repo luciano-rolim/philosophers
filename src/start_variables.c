@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/21 15:24:42 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:18:28 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 	philo->last_meal = 0;
 	philo->time_to_die = prog->params.time_to_die;
 	philo->all_alive = &prog->all_alive;
-	philo->mutex_print = prog->mutexes.printing;
-	philo->mutex_all_alive = prog->mutexes.all_alive;
+	philo->mutex_print = &prog->mutexes.printing;
+	philo->mutex_all_alive = &prog->mutexes.all_alive;
 	return (1);
 }
 
@@ -114,15 +114,9 @@ static int	basic_mutexes_init(t_prog *prog)
 {
 	if (!prog)
 		return (0);
-	// if (!mutex_init(prog->mutexes.fork_availability))
-	// 	return (0);
-	if (!mutex_init(prog->mutexes.eat_first_count))
+	if (!mutex_init(&prog->mutexes.printing))
 		return (0);
-	// if (!mutex_init(prog->mutexes.queue))
-	// 	return (0);
-	if (!mutex_init(prog->mutexes.printing))
-		return (0);
-	if (!mutex_init(prog->mutexes.all_alive))
+	if (!mutex_init(&prog->mutexes.all_alive))
 		return (0);
 	return (1);
 }
@@ -153,28 +147,16 @@ static int	start_philos_mutexes(t_prog *prog)
 static int	mem_allocation(t_prog *prog)
 {
 	int	t_size;
-	int	m_size;
-	int	i_size;
 	int	p_size;
 
 	if (!prog)
 		return (print_error("Error on mem_allocation function call\n"));
 	t_size = sizeof(pthread_t);
-	i_size = sizeof(int);
-	m_size = sizeof(pthread_mutex_t);
 	p_size = sizeof(t_philo);
-	prog->mutexes.forks = ft_calloc(m_size, prog->params.nbr_philos);
 	prog->threads = ft_calloc(t_size, prog->params.nbr_philos);
 	prog->philos = malloc(p_size * prog->params.nbr_philos);
-	prog->queue.arr = malloc((i_size) * prog->params.nbr_philos * 100);
-	prog->mutexes.all_alive = malloc(m_size);
-	prog->mutexes.eat_first_count = malloc(m_size);
-	prog->mutexes.printing = malloc(m_size);
-	if (!prog->threads || !prog->mutexes.forks || !prog->philos \
-	|| !prog->mutexes.eat_first_count \
-	|| !prog->queue.arr || !prog->mutexes.printing)
+	if (!prog->threads || !prog->mutexes.forks || !prog->philos)
 		return (print_error("Error: Malloc failure\n"));
-	prog->queue.arr_last = ((prog->params.nbr_philos * 100) - 1);
 	return (1);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arg_check.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/17 15:12:52 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:16:04 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,24 +80,14 @@ static int	initialize_variables(t_prog *prog)
 	prog->threads = NULL;
 	prog->philos = NULL;
 	prog->all_alive = 1;
-	// prog->eat_first_line = -1;
 	prog->strt_tm = -1;
 	prog->wait_one_cicle = -1;
 	prog->even_philos = -1;
-	prog->mutexes.forks = NULL;
-	prog->mutexes.printing = NULL;
-	prog->mutexes.all_alive = NULL;
-	prog->mutexes.eat_first_count = NULL;
 	prog->params.nbr_philos = -1;
 	prog->params.time_to_die = -1;
 	prog->params.time_to_eat = -1;
 	prog->params.time_to_sleep = -1;
 	prog->params.nbr_must_eat = -1;
-	prog->queue.arr = NULL;
-	prog->queue.beggining = 0;
-	prog->queue.ending = 0;
-	prog->queue.size = 0;
-	prog->queue.arr_last = 0;
 	return (1);
 }
 

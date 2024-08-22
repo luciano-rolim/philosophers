@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/21 12:53:58 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:39:43 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	start_program(t_prog *prog)
 	int				i;
 	i = -1;
 
-	prog->strt_tm = (time_mls() + 100);
+	prog->strt_tm = (time_mls() + 200);
 	while (++i < prog->params.nbr_philos)
 		pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
 	return (1);

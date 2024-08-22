@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/21 15:22:59 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/22 10:16:11 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <string.h>
 # include <signal.h>
 # include <time.h>
+# include <stdbool.h>
 
 typedef struct s_philo
 {
@@ -60,23 +61,11 @@ typedef struct s_params
 
 typedef struct s_mutexes
 {
-	// pthread_mutex_t *fork_availability;
-	pthread_mutex_t *eat_first_count;
-	pthread_mutex_t *printing;
-	// pthread_mutex_t	*queue;
-	pthread_mutex_t	*all_alive;
-	pthread_mutex_t	*forks;
-	// int				*bool_forks;
+	pthread_mutex_t printing;
+	pthread_mutex_t	all_alive;
+	pthread_mutex_t	forks[250];
+	bool			sim_stop;
 }	t_mutexes;
-
-typedef struct s_queue
-{
-	int	*arr;
-	int	arr_last;
-	int	beggining;
-	int	ending;
-	int	size;
-}	t_queue ;
 
 typedef struct s_prog
 {
@@ -84,9 +73,7 @@ typedef struct s_prog
 	t_mutexes		mutexes;
 	pthread_t		*threads;
 	t_philo			*philos;
-	t_queue			queue;
 	int				all_alive;
-	// int				eat_first_line;
 	int				even_philos;
 	int				wait_one_cicle;
 	long int		strt_tm;
@@ -115,10 +102,6 @@ int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
 // int			eat_first_priority(t_prog *prog, t_philo *philo);
-
-//Queue functions
-int			add_to_queue(t_prog *prog, t_philo *philo);
-int			remove_from_queue(t_prog *prog, t_philo *philo);
 
 //Start variables functions
 int			start_variables(t_prog *prog);
