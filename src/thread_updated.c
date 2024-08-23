@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 13:14:16 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:18:17 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 	if (philo->even_prog)
 	{
 		if (philo->time_to_sleep < philo->time_to_eat)
-			usleep(philo->time_to_eat - philo->time_to_sleep - 1000); //this stuff can be a variable
+		{
+			if (philo->time_to_eat > 0)
+			{
+				usleep((philo->time_to_eat - philo->time_to_sleep) - 900);
+			}
+		}
 	}
 	else
 	{
@@ -56,13 +61,19 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 		{
 			if (philo->wait_one_remaining > 0)
 			{
-				usleep(((philo->time_to_eat) - (philo->time_to_sleep)) - 1000); //store in variable
-				philo->wait_one_remaining--;
+				if (philo->time_to_eat > 0)
+				{
+					usleep(((philo->time_to_eat) - (philo->time_to_sleep)) - 900); //store in variable
+					philo->wait_one_remaining--;
+				}
 			}
 			else
 			{
-				usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 1000); //store in variable //reduce to 500 perhapes?
-				philo->wait_one_remaining = philo->max_wait_one_remaining;
+				if (philo->time_to_eat > 0)
+				{
+					usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 900); //store in variable //reduce to 500 perhapes?
+					philo->wait_one_remaining = philo->max_wait_one_remaining;
+				}
 			}
 		}
 		else if (philo->time_to_sleep == philo->time_to_eat)
@@ -71,8 +82,11 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 				philo->wait_one_remaining--;
 			else
 			{
-				usleep(philo->time_to_eat - 1000);
-				philo->wait_one_remaining = philo->max_wait_one_remaining;
+				if (philo->time_to_eat > 0)
+				{
+					usleep(philo->time_to_eat - 900);
+					philo->wait_one_remaining = philo->max_wait_one_remaining;
+				}
 			}
 		}
 		else
@@ -81,7 +95,7 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 				philo->wait_one_remaining--;
 			else
 			{
-				usleep(1); //is this correct? perhaps 500?
+				usleep(500);
 				philo->wait_one_remaining = philo->max_wait_one_remaining;
 			}
 		}
@@ -117,13 +131,21 @@ void	*philo_thread(void *data)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
-		usleep(philo->time_to_eat - 2000); //optimize this fucking stupid shit complete shit whatafuq is that
+		if (philo->time_to_eat > 0)
+		{
+			printf("wait time is %i\n", philo->time_to_eat - 900);
+			usleep(philo->time_to_eat - 900);
+		}
 	}
 	else if (philo->start_position == 3)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
-		usleep(philo->time_to_eat * 2- 2000); //optimize this fucking stupid shit complete shit whatafuq is that
+		if (philo->time_to_eat > 0)
+		{
+			printf("wait time is %i\n", philo->time_to_eat - 900);
+			usleep((philo->time_to_eat * 2) - 900); //optimize this fucking stupid shit complete shit whatafuq is that
+		}
 	}
 	else
 		delay_to_start(philo);
@@ -155,7 +177,6 @@ void	*lone_philo_thread(void *data)
 	philo->strt_tm = prog->strt_tm;
 	delay_to_start(philo);
 	custom_write(philo, "is thinking\n");
-	while (all_alive(philo));
 	return (NULL);
 }
 
