@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 17:09:39 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:42:52 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,51 @@ void	custom_write(t_philo *philo, char *message)
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
-void	regular_think_action(t_philo *philo)
+void	regular_think_action(t_philo *philo) //i can calculate all this freaking time to think stuff right before the program starts, see, specially the think time variable
 {
 	custom_write(philo, "is thinking\n");
-	if (philo->time_to_sleep < philo->time_to_eat)
-		usleep(philo->time_to_eat - philo->time_to_sleep - 1000);
+	if (philo->even_prog)
+	{
+		if (philo->time_to_sleep < philo->time_to_eat)
+			usleep(philo->time_to_eat - philo->time_to_sleep - 1000); //this stuff can be a variable
+	}
+	else
+	{
+		if (philo->time_to_sleep < philo->time_to_eat)
+		{
+			if (philo->wait_one_remaining > 0)
+			{
+				usleep(((philo->time_to_eat) - (philo->time_to_sleep)) - 1000); //store in variable
+				philo->wait_one_remaining--;
+			}
+			else
+			{
+				usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 1000); //store in variable //reduce to 500 perhapes?
+				philo->wait_one_remaining = philo->max_wait_one_remaining;
+			}
+		}
+		else if (philo->time_to_sleep == philo->time_to_eat)
+		{
+			if (philo->wait_one_remaining > 0)
+				philo->wait_one_remaining--;
+			else
+			{
+				usleep(philo->time_to_eat - 1000);
+				philo->wait_one_remaining = philo->max_wait_one_remaining;
+			}
+		}
+		else
+		{
+			if (philo->wait_one_remaining > 0)
+				philo->wait_one_remaining--;
+			else
+			{
+				usleep(1); //replace by mathematical expression?
+				// usleep((philo->time_to_eat * 2) - ((philo->time_to_sleep - philo->time_to_eat) * 2) - 1000); //store in variable
+				philo->wait_one_remaining = philo->max_wait_one_remaining;
+			}
+		}
+	}
 }
 
 void	write_fork_eat_action(t_philo *philo)
@@ -72,17 +112,23 @@ void	*philo_thread(void *data)
 	t_prog	*prog;
 
 	philo = (t_philo *)data;
-	prog = (t_prog *)philo->prog;
+	prog = (t_prog *)philo->prog; //is it actually necessary?
 	philo->strt_tm = prog->strt_tm;
-	if (philo->nbr % 2 == 0)
+	if (philo->start_position == 2)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
-		usleep(philo->time_to_eat - 2000);
+		usleep(philo->time_to_eat - 2000); //optimize this fucking stupid shit complete shit whatafuq is that
+	}
+	else if (philo->start_position == 3)
+	{
+		delay_to_start(philo);
+		custom_write(philo, "is thinking\n");
+		usleep(philo->time_to_eat * 2- 2000); //optimize this fucking stupid shit complete shit whatafuq is that
 	}
 	else
 		delay_to_start(philo);
-	while (all_alive(philo))
+	while (all_alive(philo)) //reduce overhead, dont consult all alive here
 	{
 		pthread_mutex_lock(philo->grab_first);
 		custom_write(philo, "has taken a fork\n");
@@ -103,9 +149,9 @@ void	*philo_thread(void *data)
 void	*death_thread(void *data)
 {
 	t_prog *prog;
-	int i;
-	int	no_deaths;
-	int	active_philos;
+	int			i;
+	int			no_deaths;
+	int			active_philos;
 
 	prog = (t_prog *)data;
 	no_deaths = 1;
@@ -122,8 +168,8 @@ void	*death_thread(void *data)
 			if ((prog->params.nbr_must_eat != -1) && !prog->philos[i].must_eat)
 				active_philos--;
 			else
-			{
-				if ((simulation_timestamp(prog->strt_tm) - (prog->philos[i].last_meal)) >= (prog->params.time_to_die / 1000))
+			{ 
+				if ((simulation_timestamp(prog->strt_tm) - (prog->philos[i].last_meal) >= (prog->params.time_to_die / 1000))) //optimize, reduce all calculus
 				{
 					pthread_mutex_lock(&prog->mutexes.printing);
 					pthread_mutex_lock(&prog->mutexes.all_alive);
