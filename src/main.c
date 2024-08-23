@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:45:53 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:17:32 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	start_program(t_prog *prog)
 			i++;
 		}
 	}
+
 	// add error messages in case of pthread_create failure and stuff like that;
 	// if start position equals 1 perhaps already print both forks and shit, because i know will eat
 	return (1);
@@ -36,7 +37,7 @@ static int	start_program(t_prog *prog)
 
 int	main(int argc, char **argv)
 {
-	t_prog	prog; //change to some static shit?
+	static t_prog	prog;
 
 	if (!check_arguments(&prog, argc, argv))
 		return (EXIT_FAILURE);

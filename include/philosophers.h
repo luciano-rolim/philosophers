@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:45:48 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:28:44 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_prog
 	pthread_t		death_checker;
 	int				eat_ending_set;
 	int				all_alive;
-	int				even_philos;
 	int				wait_one_cicle;
 	long int		strt_tm;
 }	t_prog;
@@ -105,6 +104,7 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
+int			mutex_init(pthread_mutex_t *mutex);
 
 //Start variables functions
 int			start_variables(t_prog *prog);

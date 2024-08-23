@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:41:43 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:55:56 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,11 @@ static int	initialize_variables(t_prog *prog)
 {
 	if (!prog)
 		return (print_error("Error on initialize variables call\n"));
-	prog->threads = NULL;
-	prog->philos = NULL;
 	prog->all_alive = 1;
 	prog->strt_tm = -1;
 	prog->wait_one_cicle = -1;
-	prog->even_philos = -1;
+	prog->eat_ending_set = -1;
+	prog->strt_tm = -1;
 	prog->params.nbr_philos = -1;
 	prog->params.time_to_die = -1;
 	prog->params.time_to_eat = -1;

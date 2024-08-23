@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 12:06:21 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:28:32 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,15 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-// int	eat_first_priority(t_prog *prog, t_philo *philo)
-// {
-// 	if (!prog || !philo)
-// 		return (-1);
-// 	if (is_even(philo->nbr) || (philo->nbr == prog->params.nbr_philos))
-// 		philo->eat_first_priority = 0;
-// 	else
-// 		philo->eat_first_priority = 1;
-// 	return (1);
-// }
+int	mutex_init(pthread_mutex_t *mutex)
+{
+	int function_return;
+
+	if (!mutex)
+		return (0);
+	function_return = -1;
+	function_return = pthread_mutex_init(mutex, NULL);
+	if (function_return != 0)
+		return (print_error("Error initializing mutex\n"));
+	return (1);
+}
