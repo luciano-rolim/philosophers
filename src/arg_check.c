@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 15:20:46 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 12:08:11 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,16 @@ static int	initialize_variables(t_prog *prog)
 	return (1);
 }
 
+int	check_philo_quantity(t_prog *prog)
+{
+	if (prog->params.nbr_philos == 0)
+		return (print_error("Simulation can't start without philosophers\n"));
+	else if (prog->params.nbr_philos > 250)
+		return (print_error("Please, don't insert more than 250 philosophers on the simulation. This might collapse the computer!\n"));
+	else
+		return (1);
+}
+
 int	check_arguments(t_prog *prog, int argc, char **argv)
 {
 	int		i;
@@ -115,6 +125,8 @@ int	check_arguments(t_prog *prog, int argc, char **argv)
 			printf("Error: index %i is not valid. %s\n", i, tmp_message);
 			return (0);
 		}
+		if (!check_philo_quantity(prog))
+			return (0);
 		i++;
 	}
 	return (1);

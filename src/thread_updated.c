@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 11:42:52 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:55:48 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 				philo->wait_one_remaining--;
 			else
 			{
-				usleep(1); //replace by mathematical expression?
-				// usleep((philo->time_to_eat * 2) - ((philo->time_to_sleep - philo->time_to_eat) * 2) - 1000); //store in variable
+				usleep(1); //is this correct? perhaps 500?
 				philo->wait_one_remaining = philo->max_wait_one_remaining;
 			}
 		}

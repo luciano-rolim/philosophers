@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 15:50:42 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 11:57:53 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	start_program(t_prog *prog)
 
 int	main(int argc, char **argv)
 {
-	t_prog	prog;
+	t_prog	prog; //change to some static shit?
 
 	if (!check_arguments(&prog, argc, argv))
 		return (EXIT_FAILURE);
