@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:11:04 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:45:53 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	main(int argc, char **argv)
 	t_prog	prog; //change to some static shit?
 
 	if (!check_arguments(&prog, argc, argv))
+		return (EXIT_FAILURE);
+	if (!extra_checks(&prog))
 		return (EXIT_FAILURE);
 	if (!start_variables(&prog))
 	{

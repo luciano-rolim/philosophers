@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:04:34 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:45:48 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_prog
 
 //Arg check functions
 int			check_arguments(t_prog *prog, int argc, char **argv);
+int			extra_checks(t_prog *prog);
 
 //Basic Utils functions
 int			string_len(char *s);
