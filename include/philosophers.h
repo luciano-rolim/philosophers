@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 15:59:22 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 12:19:59 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int			start_variables(t_prog *prog);
 //Thread functions
 void		*philo_thread(void *data);
 void		*death_thread(void *data);
+void		*lone_philo_thread(void *data);
 
 //Time functions
 long int	time_mls(void);

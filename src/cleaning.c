@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/22 15:59:17 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:08:23 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static void	clean_threads(t_prog *prog)
 			i++;
 		}
 	}
-	free(prog->threads);
+	if (prog->threads)
+		free(prog->threads);
 }
 
 static void	clean_forks(t_prog *prog)

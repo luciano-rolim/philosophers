@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 11:55:48 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:14:16 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,20 @@ void	*philo_thread(void *data)
 		usleep(philo->time_to_sleep);
 		regular_think_action(philo);
 	}
+	return (NULL);
+}
+
+void	*lone_philo_thread(void *data)
+{
+	t_philo	*philo;
+	t_prog	*prog;
+
+	philo = (t_philo *)data;
+	prog = (t_prog *)philo->prog;
+	philo->strt_tm = prog->strt_tm;
+	delay_to_start(philo);
+	custom_write(philo, "is thinking\n");
+	while (all_alive(philo));
 	return (NULL);
 }
 
