@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 12:19:59 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 15:04:34 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,6 @@ void		*lone_philo_thread(void *data);
 //Time functions
 long int	time_mls(void);
 long int	simulation_timestamp(long int start_time);
+void		delay_to_start(t_philo *philo);
 
 #endif

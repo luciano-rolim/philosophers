@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 14:18:17 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:55:05 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	regular_think_action(t_philo *philo) //i can calculate all this freaking ti
 			{
 				if (philo->time_to_eat > 0)
 				{
-					usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 900); //store in variable //reduce to 500 perhapes?
+					usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 900); //store in variable //reduce to 500 perhapes? TREATE OVERFLOW ERROR
 					philo->wait_one_remaining = philo->max_wait_one_remaining;
 				}
 			}
@@ -133,8 +133,7 @@ void	*philo_thread(void *data)
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
 		{
-			printf("wait time is %i\n", philo->time_to_eat - 900);
-			usleep(philo->time_to_eat - 900);
+			usleep(philo->time_to_eat - 900); //STORE VARIABLE TREAT UNDERFLOW ERROR
 		}
 	}
 	else if (philo->start_position == 3)
@@ -143,13 +142,12 @@ void	*philo_thread(void *data)
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
 		{
-			printf("wait time is %i\n", philo->time_to_eat - 900);
-			usleep((philo->time_to_eat * 2) - 900); //optimize this fucking stupid shit complete shit whatafuq is that
+			usleep((philo->time_to_eat * 2) - 900); //STORE VARIABLE TREAT UNDERFLOW ERROR
 		}
 	}
 	else
 		delay_to_start(philo);
-	while (all_alive(philo)) //reduce overhead, dont consult all alive here
+	while (all_alive(philo)) //reduce overhead, dont consult all alive here. let it go and consult later? on write check alive if not then change variable
 	{
 		pthread_mutex_lock(philo->grab_first);
 		custom_write(philo, "has taken a fork\n");

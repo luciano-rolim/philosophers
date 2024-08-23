@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 12:08:11 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/23 14:34:08 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ int	check_arguments(t_prog *prog, int argc, char **argv)
 		}
 		if (!check_philo_quantity(prog))
 			return (0);
+		if (prog->params.nbr_must_eat == 0)
+			return (print_error("Number of times each philosopher must eat is 0. Simulation stopped\n"));
 		i++;
 	}
 	return (1);
