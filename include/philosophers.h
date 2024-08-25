@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 10:51:02 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:05:50 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,13 @@
 typedef struct s_philo
 {
 	int				nbr;
-	int				index;
-	int				index_next;
+	struct timeval	tmp_time;
 	pthread_mutex_t	*grab_first;
 	pthread_mutex_t	*grab_second;
 	int				start_position;
 	int				wait_one_remaining;
 	int				max_wait_one_remaining;
-	int				eat_count;
 	int				must_eat;
-	int				alive;
 	long int		last_meal;
 	int				even_prog;
 	void			*prog;
@@ -50,8 +47,6 @@ typedef struct s_philo
 	pthread_mutex_t	mutex_last_meal;
 	pthread_mutex_t *mutex_all_alive;
 	pthread_mutex_t *mutex_print;
-	int				forks[2];
-	struct timeval	tmp_time;
 }	t_philo;
 
 typedef struct s_params
@@ -118,7 +113,7 @@ void		*lone_philo_thread(void *data);
 
 //Time functions
 long int	time_mls(void);
-long int	simulation_timestamp(long int start_time);
+long int	simulation_timestamp(long int start_time, struct timeval tmp_time);
 void		delay_to_start(t_philo *philo);
 
 #endif

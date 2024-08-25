@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 10:52:58 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 11:57:15 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	calculus_wait_one_remaining(t_prog *prog, t_philo *philo)
 	if (is_even(prog->params.nbr_philos))
 	{
 		philo->even_prog = 1;
-		philo->wait_one_remaining = -1; //check how this stuff behaves in the thread code
+		philo->wait_one_remaining = -1;
 		philo->max_wait_one_remaining = -1;
 	}
 	else
@@ -52,19 +52,27 @@ static int	start_position(t_prog *prog, t_philo *philo)
 	return (1);
 }
 
-int	grab_fork_order(t_prog *prog, t_philo *philo)
+int	grab_fork_order(t_prog *prog, t_philo *philo, int i)
 {
-	if (!prog || !philo)
+	int index;
+	int	index_next;
+
+	if (!prog || !philo || i < 0)
 		return (print_error("Error on grab_fork_order call\n"));
+	index = i;
+	if (i == (prog->params.nbr_philos - 1))
+		index_next = 0;
+	else
+		index_next = i + 1;
 	if (is_even(philo->nbr))
 	{
-		philo->grab_first = &prog->mutexes.forks[philo->index_next];
-		philo->grab_second = &prog->mutexes.forks[philo->index];
+		philo->grab_first = &prog->mutexes.forks[index_next];
+		philo->grab_second = &prog->mutexes.forks[index];
 	}
 	else
 	{
-		philo->grab_first = &prog->mutexes.forks[philo->index];
-		philo->grab_second = &prog->mutexes.forks[philo->index_next];
+		philo->grab_first = &prog->mutexes.forks[index];
+		philo->grab_second = &prog->mutexes.forks[index_next];
 	}
 	return (1);
 }
@@ -84,7 +92,6 @@ static int philo_variables_init(t_prog *prog, t_philo *philo, int i)
 		philo->must_eat = -1;
 	}
 	philo->nbr = i + 1;
-	philo->eat_count = 0;
 	philo->prog = prog;
 	philo->last_meal = 0;
 	philo->time_to_die = prog->params.time_to_die;
@@ -94,18 +101,6 @@ static int philo_variables_init(t_prog *prog, t_philo *philo, int i)
 	philo->mutex_print = &prog->mutexes.printing;
 	philo->mutex_all_alive = &prog->mutexes.all_alive;
 	return (1);
-}
-
-static int philo_index_calc(t_prog *prog, t_philo *philo, int i)
-{
-	if (!prog || !philo || i < 0)
-		return (print_error("Error on philo_index_calc call\n"));
-	philo->index = i;
-	if (i == (prog->params.nbr_philos - 1))
-		philo->index_next = 0;
-	else
-		philo->index_next = i + 1;
-	return (1);	
 }
 
 static int calculus_time_to_think(t_prog *prog, t_philo *philo)
@@ -150,9 +145,7 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 		return (print_error("Error on philo_init call\n"));
 	if (!philo_variables_init(prog, philo, i))
 		return (0);
-	if (!philo_index_calc(prog, philo, i))
-		return (0);
-	if (!grab_fork_order(prog, philo))
+	if (!grab_fork_order(prog, philo, i))
 		return (0);
 	if (!start_position(prog, philo))
 		return (0);

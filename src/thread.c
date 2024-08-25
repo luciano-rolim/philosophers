@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_updated.c                                   :+:      :+:    :+:   */
+/*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 11:41:24 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:07:57 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	custom_write(t_philo *philo, char *message)
 		pthread_mutex_unlock(philo->mutex_print);
 		return ;
 	}
-	printf("%li %i %s", simulation_timestamp(philo->strt_tm), philo->nbr, message);
+	printf("%li %i %s", simulation_timestamp(philo->strt_tm, philo->tmp_time), philo->nbr, message);
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
@@ -72,7 +72,7 @@ void	write_fork_eat_action(t_philo *philo)
 		pthread_mutex_unlock(&philo->mutex_last_meal);
 		return ;
 	}
-	philo->last_meal = simulation_timestamp(philo->strt_tm);
+	philo->last_meal = simulation_timestamp(philo->strt_tm, philo->tmp_time);
 	printf("%li %i has taken a fork\n%li %i is eating\n", philo->last_meal, philo->nbr, philo->last_meal, philo->nbr);
 	philo->must_eat--;
 	pthread_mutex_unlock(philo->mutex_print);
@@ -85,9 +85,8 @@ void	*philo_thread(void *data)
 	t_prog	*prog;
 
 	philo = (t_philo *)data;
-	prog = (t_prog *)philo->prog; //is it actually necessary?
+	prog = (t_prog *)philo->prog;
 	philo->strt_tm = prog->strt_tm;
-
 	if (philo->start_position == 2)
 	{
 		delay_to_start(philo);
@@ -141,6 +140,7 @@ void	*death_thread(void *data)
 	int			i;
 	int			no_deaths;
 	int			active_philos;
+	struct timeval	tmp_time;
 
 	prog = (t_prog *)data;
 	no_deaths = 1;
@@ -158,12 +158,12 @@ void	*death_thread(void *data)
 				active_philos--;
 			else
 			{ 
-				if ((simulation_timestamp(prog->strt_tm) - (prog->philos[i].last_meal) >= (prog->params.time_to_die / 1000))) //optimize, reduce all calculus
+				if ((simulation_timestamp(prog->strt_tm, tmp_time) - (prog->philos[i].last_meal) >= (prog->params.time_to_die / 1000))) //optimize, reduce all calculus
 				{
 					pthread_mutex_lock(&prog->mutexes.printing);
 					pthread_mutex_lock(&prog->mutexes.all_alive);
 					prog->all_alive = 0;
-					printf("%li %i died\n", simulation_timestamp(prog->strt_tm), prog->philos[i].nbr);
+					printf("%li %i died\n", simulation_timestamp(prog->strt_tm, tmp_time), prog->philos[i].nbr);
 					pthread_mutex_unlock(&prog->mutexes.all_alive);
 					pthread_mutex_unlock(&prog->mutexes.printing);
 					pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);

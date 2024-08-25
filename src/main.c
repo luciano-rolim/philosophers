@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 11:41:34 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:01:57 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	start_program(t_prog *prog)
 
 	i = 0;
 	function_return = -1;
-	prog->strt_tm = ((time_mls() + 300) + (prog->params.nbr_must_eat * 10));
+	prog->strt_tm = ((time_mls() + 300) + (prog->params.nbr_philos * 10));
 	function_return = pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	if (function_return != 0)
 		return(print_error("Error initializing death_thread\n"));
