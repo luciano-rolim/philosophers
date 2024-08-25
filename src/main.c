@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 11:10:17 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 11:41:34 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,30 @@
 static int	start_program(t_prog *prog)
 {
 	int	i;
+	int	function_return;
 
 	i = 0;
-	prog->strt_tm = (time_mls() + 500); //optimize this shit
-	pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
+	function_return = -1;
+	prog->strt_tm = ((time_mls() + 300) + (prog->params.nbr_must_eat * 10));
+	function_return = pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
+	if (function_return != 0)
+		return(print_error("Error initializing death_thread\n"));
 	if (prog->params.nbr_philos == 1)
-		pthread_create(&prog->threads[i], NULL, lone_philo_thread, (void *)&prog->philos[i]);
+	{
+		function_return = pthread_create(&prog->threads[i], NULL, lone_philo_thread, (void *)&prog->philos[i]);
+		if (function_return != 0)
+			return(print_error("Error initializing lone philo thread\n"));
+	}
 	else
 	{
 		while (i < prog->params.nbr_philos)
 		{
-			pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
+			function_return = pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
+			if (function_return != 0)
+				return(print_error("Error initializing philo threads\n"));
 			i++;
 		}
 	}
-
-	// add error messages in case of pthread_create failure and stuff like that;
-	// if start position equals 1 perhaps already print both forks and shit, because i know will eat
 	return (1);
 }
 

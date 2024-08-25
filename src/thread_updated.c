@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 10:46:42 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 11:41:24 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,20 @@ void	*philo_thread(void *data)
 	philo = (t_philo *)data;
 	prog = (t_prog *)philo->prog; //is it actually necessary?
 	philo->strt_tm = prog->strt_tm;
+
 	if (philo->start_position == 2)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
-		{
-			usleep(philo->time_to_eat - 900); //STORE VARIABLE TREAT UNDERFLOW ERROR
-		}
+			usleep(philo->time_to_eat - 900);
 	}
 	else if (philo->start_position == 3)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
-		{
-			usleep((philo->time_to_eat * 2) - 900); //STORE VARIABLE TREAT UNDERFLOW ERROR
-		}
+			usleep((philo->time_to_eat * 2) - 900);
 	}
 	else
 		delay_to_start(philo);
@@ -116,7 +113,7 @@ void	*philo_thread(void *data)
 		usleep(philo->time_to_eat);
 		pthread_mutex_unlock(philo->grab_second);
 		pthread_mutex_unlock(philo->grab_first);
-		if (philo->eat_ending_set && !philo->must_eat)
+		if (philo->eat_ending_set && !philo->must_eat) //here, use this to break the loop, not while all alive
 			break ;
 		custom_write(philo, "is sleeping\n");
 		usleep(philo->time_to_sleep);

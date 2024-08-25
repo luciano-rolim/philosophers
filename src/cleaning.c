@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 10:52:11 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 11:43:38 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static void	clean_threads(t_prog *prog)
 		free(prog->threads);
 }
 
-static void	clean_forks(t_prog *prog)
+static void	clean_mutexes(t_prog *prog)
 {
 	int	i;
 
-	if (!prog /*|| !prog->mutexes.forks*/)
+	if (!prog)
 		return ;
 	if (prog->params.nbr_philos != -1)
 	{
@@ -44,23 +44,6 @@ static void	clean_forks(t_prog *prog)
 		while (i < prog->params.nbr_philos)
 			pthread_mutex_destroy(&prog->mutexes.forks[i++]);
 	}
-	// free(prog->mutexes.forks);
-}
-
-// static void	clean_and_free_mutex(pthread_mutex_t *mutex)
-// {
-// 	if (!mutex)
-// 		return ;
-// 	pthread_mutex_destroy(mutex);
-// 	free(mutex);
-// }
-
-static void	clean_mutexes(t_prog *prog)
-{
-	if (!prog)
-		return ;
-	// if (prog->mutexes.forks)
-	clean_forks(prog);
 	pthread_mutex_destroy(&prog->mutexes.all_alive);
 	pthread_mutex_destroy(&prog->mutexes.printing);
 }
