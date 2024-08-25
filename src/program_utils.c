@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   program_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 16:28:32 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:18:19 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int	param_attribution(t_prog *prog, int nbr, int arg)
 	if (arg == 1)
 		prog->params.nbr_philos = nbr;
 	else if (arg == 2)
+	{
 		prog->params.time_to_die = (nbr * 1000);
+		prog->params.time_to_die_mls = nbr;
+	}
 	else if (arg == 3)
 		prog->params.time_to_eat = (nbr * 1000);
 	else if (arg == 4)
@@ -75,7 +78,7 @@ int	mutex_init(pthread_mutex_t *mutex)
 	int function_return;
 
 	if (!mutex)
-		return (0);
+		return (print_error("Error on mutex_init call\n"));
 	function_return = -1;
 	function_return = pthread_mutex_init(mutex, NULL);
 	if (function_return != 0)

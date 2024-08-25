@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 12:05:50 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:11:37 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ typedef struct s_params
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				nbr_must_eat;		
+	int				nbr_must_eat;
+	int				time_to_die_mls;	
 }	t_params;
 
 typedef struct s_mutexes

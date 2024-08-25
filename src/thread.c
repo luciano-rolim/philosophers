@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 12:07:57 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 12:13:25 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ void	*lone_philo_thread(void *data)
 void	*death_thread(void *data)
 {
 	t_prog *prog;
-	int			i;
-	int			no_deaths;
-	int			active_philos;
+	int				i;
+	int				no_deaths;
+	int				active_philos;
 	struct timeval	tmp_time;
 
 	prog = (t_prog *)data;
@@ -158,7 +158,7 @@ void	*death_thread(void *data)
 				active_philos--;
 			else
 			{ 
-				if ((simulation_timestamp(prog->strt_tm, tmp_time) - (prog->philos[i].last_meal) >= (prog->params.time_to_die / 1000))) //optimize, reduce all calculus
+				if ((simulation_timestamp(prog->strt_tm, tmp_time) - (prog->philos[i].last_meal) >= prog->params.time_to_die_mls))
 				{
 					pthread_mutex_lock(&prog->mutexes.printing);
 					pthread_mutex_lock(&prog->mutexes.all_alive);
