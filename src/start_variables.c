@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 11:57:15 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 14:31:51 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ static int	mem_allocation(t_prog *prog)
 int	start_variables(t_prog *prog)
 {
 	int	i;
+	// pthread_mutex_t forks[prog->params.nbr_philos]; improve this stuff later
 
 	if (!prog)
 		return (print_error("Error on start variables call\n"));
