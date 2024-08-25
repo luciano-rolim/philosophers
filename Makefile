@@ -6,7 +6,7 @@
 #    By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 12:12:03 by lmeneghe          #+#    #+#              #
-#    Updated: 2024/08/25 12:36:31 by lmeneghe         ###   ########.fr        #
+#    Updated: 2024/08/25 14:20:55 by lmeneghe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,9 @@ SRC_FILES       =	src/arg_check_extra.c src/arg_check.c src/basic_utils.c \
 OBJS_DIR        = obj/
 OBJS            = $(SRC_FILES:src/%.c=$(OBJS_DIR)%.o)
 
-# Main rule: compile libraries and then the program.
+# Main rule: compile the program.
 $(NAME):		$(OBJS)
-				@$(CC) $(CFLAGS) $(OBJS) \
-				-o $(NAME)
+				@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 # Make instruction on how to compile .o if is not up to date
 $(OBJS_DIR)%.o: src/%.c
@@ -39,12 +38,11 @@ $(OBJS_DIR)%.o: src/%.c
 # Standard all command
 all:            $(NAME)
 
-# Clean: removes all .o files in all directories
+# Clean: removes all .o files, if the obj folder exists
 clean:
 				@if [ -d "$(OBJS_DIR)" ]; then find $(OBJS_DIR) -type f -name "*.o" -delete; fi
 
-# Fclean: call clean + remove so_long file
-# Extra rule to fclean the libft and printf libraries + clean mlx library
+# Fclean: call clean + remove program file
 fclean:         clean
 				@rm -f $(NAME)
 
