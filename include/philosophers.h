@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 16:28:44 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 10:51:02 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef struct s_philo
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				time_to_think;
+	long int		time_to_double_think;
 	int				*all_alive;
 	int				eat_ending_set;
 	pthread_mutex_t	mutex_last_meal;

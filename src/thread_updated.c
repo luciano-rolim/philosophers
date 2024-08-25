@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread_updated.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 17:14:08 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 10:46:42 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,62 +42,22 @@ void	custom_write(t_philo *philo, char *message)
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
-void	regular_think_action(t_philo *philo) //i can calculate all this freaking time to think stuff right before the program starts, see, specially the think time variable
+void	think_action(t_philo *philo)
 {
 	custom_write(philo, "is thinking\n");
 	if (philo->even_prog)
-	{
-		if (philo->time_to_sleep < philo->time_to_eat)
-		{
-			if (philo->time_to_eat > 0)
-			{
-				usleep((philo->time_to_eat - philo->time_to_sleep) - 900);
-			}
-		}
-	}
+		usleep(philo->time_to_think);
 	else
 	{
-		if (philo->time_to_sleep < philo->time_to_eat)
+		if (philo->wait_one_remaining > 0)
 		{
-			if (philo->wait_one_remaining > 0)
-			{
-				if (philo->time_to_eat > 0)
-				{
-					usleep(((philo->time_to_eat) - (philo->time_to_sleep)) - 900); //store in variable
-					philo->wait_one_remaining--;
-				}
-			}
-			else
-			{
-				if (philo->time_to_eat > 0)
-				{
-					usleep((philo->time_to_eat * 2) - philo->time_to_sleep - 900); //store in variable //reduce to 500 perhapes? TREATE OVERFLOW ERROR
-					philo->wait_one_remaining = philo->max_wait_one_remaining;
-				}
-			}
-		}
-		else if (philo->time_to_sleep == philo->time_to_eat)
-		{
-			if (philo->wait_one_remaining > 0)
-				philo->wait_one_remaining--;
-			else
-			{
-				if (philo->time_to_eat > 0)
-				{
-					usleep(philo->time_to_eat - 900);
-					philo->wait_one_remaining = philo->max_wait_one_remaining;
-				}
-			}
+			usleep(philo->time_to_think);
+			philo->wait_one_remaining--;
 		}
 		else
 		{
-			if (philo->wait_one_remaining > 0)
-				philo->wait_one_remaining--;
-			else
-			{
-				usleep(500);
-				philo->wait_one_remaining = philo->max_wait_one_remaining;
-			}
+			usleep(philo->time_to_double_think);
+			philo->wait_one_remaining = philo->max_wait_one_remaining;
 		}
 	}
 }
@@ -160,7 +120,7 @@ void	*philo_thread(void *data)
 			break ;
 		custom_write(philo, "is sleeping\n");
 		usleep(philo->time_to_sleep);
-		regular_think_action(philo);
+		think_action(philo);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 16:17:32 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 11:10:17 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 static int	start_program(t_prog *prog)
 {
-	int				i;
+	int	i;
 
 	i = 0;
-	prog->strt_tm = (time_mls() + 500);
+	prog->strt_tm = (time_mls() + 500); //optimize this shit
 	pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	if (prog->params.nbr_philos == 1)
 		pthread_create(&prog->threads[i], NULL, lone_philo_thread, (void *)&prog->philos[i]);

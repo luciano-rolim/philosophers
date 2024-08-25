@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_variables.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 17:14:58 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/25 10:52:58 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	calculus_wait_one_remaining(t_prog *prog, t_philo *philo)
 static int	start_position(t_prog *prog, t_philo *philo)
 {
 	if (!prog || !philo)
-		return (0);
+		return (print_error("Error on start_position call\n"));
 	if (is_even(philo->nbr))
 		philo->start_position = 2;
 	else
@@ -108,6 +108,42 @@ static int philo_index_calc(t_prog *prog, t_philo *philo, int i)
 	return (1);	
 }
 
+static int calculus_time_to_think(t_prog *prog, t_philo *philo)
+{
+	if (!prog || !philo)
+		return (print_error("Error on calculus_time_to_think call\n"));
+	if (is_even(prog->params.nbr_philos))
+	{
+		if (philo->time_to_eat > philo->time_to_sleep)
+			philo->time_to_think = ((philo->time_to_eat - philo->time_to_sleep) - 900);		
+		else
+			philo->time_to_think = 0;
+		philo->time_to_double_think = -1;
+	}
+	else
+	{
+		if (philo->time_to_eat > philo->time_to_sleep)
+		{
+			philo->time_to_think = ((philo->time_to_eat - philo->time_to_sleep) - 900);
+			philo->time_to_double_think = ((philo->time_to_eat * 2) - philo->time_to_sleep - 900);
+		}
+		else if (philo->time_to_sleep == philo->time_to_eat)
+		{
+			philo->time_to_think = 0;
+			if (philo->time_to_eat > 0)
+				philo->time_to_double_think = (philo->time_to_eat - 900);
+			else
+				philo->time_to_double_think = 0;
+		}
+		else
+		{
+			philo->time_to_think = 0;
+			philo->time_to_double_think = 500;
+		}
+	}
+	return (1);
+}
+
 static int	philo_init(t_prog *prog, t_philo *philo, int i)
 {
 	if (!prog || !philo || i < 0)
@@ -124,7 +160,8 @@ static int	philo_init(t_prog *prog, t_philo *philo, int i)
 		return (0);
 	if (!mutex_init(&philo->mutex_last_meal))
 		return (0);
-	//initialize the time to wait here too
+	if (!calculus_time_to_think(prog, philo))
+		return (0);
 	return (1);
 }
 
