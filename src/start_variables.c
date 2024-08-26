@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 10:51:21 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:14:42 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,22 +170,24 @@ static int	mem_allocation(t_prog *prog)
 {
 	int	t_size;
 	int	p_size;
+	int	m_size;
 
 	if (!prog)
 		return (print_error("Error on mem_allocation function call\n"));
 	t_size = sizeof(pthread_t);
 	p_size = sizeof(t_philo);
+	m_size = sizeof(pthread_mutex_t);
 	prog->threads = ft_calloc(t_size, prog->params.nbr_philos);
 	prog->philos = ft_calloc(p_size, prog->params.nbr_philos);
-	if (!prog->threads || !prog->philos)
-		return (print_error("Error: Malloc failure\n"));
+	prog->mutexes.forks = ft_calloc(m_size, prog->params.nbr_philos);
+	if (!prog->threads || !prog->philos || !prog->mutexes.forks)
+		return (print_error("Error: Allocation failure\n"));
 	return (1);
 }
 
 int	start_variables(t_prog *prog)
 {
-	int	i;
-	// pthread_mutex_t forks[prog->params.nbr_philos]; improve this stuff later
+	int				i;
 
 	if (!prog)
 		return (print_error("Error on start variables call\n"));

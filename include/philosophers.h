@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 10:50:55 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:14:29 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_params
 typedef struct s_mutexes
 {
 	pthread_mutex_t printing;
-	pthread_mutex_t	forks[250];
+	pthread_mutex_t	*forks;
 }	t_mutexes;
 
 typedef struct s_prog
