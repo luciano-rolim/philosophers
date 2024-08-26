@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 11:43:38 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:51:03 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void	clean_mutexes(t_prog *prog)
 		while (i < prog->params.nbr_philos)
 			pthread_mutex_destroy(&prog->mutexes.forks[i++]);
 	}
-	pthread_mutex_destroy(&prog->mutexes.all_alive);
 	pthread_mutex_destroy(&prog->mutexes.printing);
 }
 

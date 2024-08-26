@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_variables.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 14:31:51 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:51:21 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ static int philo_variables_init(t_prog *prog, t_philo *philo, int i)
 	philo->time_to_sleep = prog->params.time_to_sleep;
 	philo->all_alive = &prog->all_alive;
 	philo->mutex_print = &prog->mutexes.printing;
-	philo->mutex_all_alive = &prog->mutexes.all_alive;
 	return (1);
 }
 
@@ -163,8 +162,6 @@ static int	basic_mutexes_init(t_prog *prog)
 	if (!prog)
 		return (0);
 	if (!mutex_init(&prog->mutexes.printing))
-		return (0);
-	if (!mutex_init(&prog->mutexes.all_alive))
 		return (0);
 	return (1);
 }

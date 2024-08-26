@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 12:11:37 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:50:55 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_philo
 	int				*all_alive;
 	int				eat_ending_set;
 	pthread_mutex_t	mutex_last_meal;
-	pthread_mutex_t *mutex_all_alive;
 	pthread_mutex_t *mutex_print;
 }	t_philo;
 
@@ -62,7 +61,6 @@ typedef struct s_params
 typedef struct s_mutexes
 {
 	pthread_mutex_t printing;
-	pthread_mutex_t	all_alive;
 	pthread_mutex_t	forks[250];
 }	t_mutexes;
 

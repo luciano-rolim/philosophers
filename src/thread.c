@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   thread.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 12:13:25 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:50:32 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,8 @@
 
 int all_alive(t_philo *philo)
 {
-	pthread_mutex_lock(philo->mutex_all_alive);
 	if (*philo->all_alive)
-	{
-		pthread_mutex_unlock(philo->mutex_all_alive);
 		return (1);
-	}
-	pthread_mutex_unlock(philo->mutex_all_alive);
 	return (0);
 }
 
@@ -35,6 +30,8 @@ void	custom_write(t_philo *philo, char *message)
 	pthread_mutex_lock(philo->mutex_print);
 	if (!all_alive(philo))
 	{
+		philo->eat_ending_set = 1;
+		philo->must_eat = 0;
 		pthread_mutex_unlock(philo->mutex_print);
 		return ;
 	}
@@ -68,6 +65,8 @@ void	write_fork_eat_action(t_philo *philo)
 	pthread_mutex_lock(philo->mutex_print);
 	if (!all_alive(philo))
 	{
+		philo->eat_ending_set = 1;
+		philo->must_eat = 0;
 		pthread_mutex_unlock(philo->mutex_print);
 		pthread_mutex_unlock(&philo->mutex_last_meal);
 		return ;
@@ -103,7 +102,7 @@ void	*philo_thread(void *data)
 	}
 	else
 		delay_to_start(philo);
-	while (all_alive(philo)) //reduce overhead, dont consult all alive here. let it go and consult later? on write check alive if not then change variable
+	while (1)
 	{
 		pthread_mutex_lock(philo->grab_first);
 		custom_write(philo, "has taken a fork\n");
@@ -112,7 +111,7 @@ void	*philo_thread(void *data)
 		usleep(philo->time_to_eat);
 		pthread_mutex_unlock(philo->grab_second);
 		pthread_mutex_unlock(philo->grab_first);
-		if (philo->eat_ending_set && !philo->must_eat) //here, use this to break the loop, not while all alive
+		if (philo->eat_ending_set && !philo->must_eat)
 			break ;
 		custom_write(philo, "is sleeping\n");
 		usleep(philo->time_to_sleep);
@@ -161,10 +160,8 @@ void	*death_thread(void *data)
 				if ((simulation_timestamp(prog->strt_tm, tmp_time) - (prog->philos[i].last_meal) >= prog->params.time_to_die_mls))
 				{
 					pthread_mutex_lock(&prog->mutexes.printing);
-					pthread_mutex_lock(&prog->mutexes.all_alive);
 					prog->all_alive = 0;
 					printf("%li %i died\n", simulation_timestamp(prog->strt_tm, tmp_time), prog->philos[i].nbr);
-					pthread_mutex_unlock(&prog->mutexes.all_alive);
 					pthread_mutex_unlock(&prog->mutexes.printing);
 					pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
 					no_deaths = 0;
