@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+         #
+#    By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 12:12:03 by lmeneghe          #+#    #+#              #
-#    Updated: 2024/08/25 14:20:55 by lmeneghe         ###   ########.fr        #
+#    Updated: 2024/08/26 11:33:22 by lmeneghe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME            = philo
 
 # Compiler and Flags
 CC              = gcc
-CFLAGS          = -Wall -Wextra -Werror -pthread
+CFLAGS          = -Wall -Wextra -Werror -pthread -O3
 
 # Source Files
 SRC_FILES       =	src/arg_check_extra.c src/arg_check.c src/basic_utils.c \

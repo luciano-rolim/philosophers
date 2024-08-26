@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 17:42:52 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/23 15:55:56 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 11:31:02 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	check_arguments(t_prog *prog, int argc, char **argv)
 	int		n_to_check;
 	char	*tmp_message;
 
+	n_to_check = 0;
 	if (!first_check(argc, argv, &n_to_check))
 		return (0);
 	if (!initialize_variables(prog))
