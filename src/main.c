@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmeneghe <lmeneghe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/25 12:01:57 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:28:50 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	start_program(t_prog *prog)
 
 	i = 0;
 	function_return = -1;
-	prog->strt_tm = ((time_mls() + 300) + (prog->params.nbr_philos * 10));
+	prog->strt_tm_micros = adjust_microseconds(time_micros() + 300000 + (prog->params.nbr_philos * 10000));
 	function_return = pthread_create(&prog->death_checker, NULL, death_thread, (void *)prog);
 	if (function_return != 0)
 		return(print_error("Error initializing death_thread\n"));
@@ -33,6 +33,7 @@ static int	start_program(t_prog *prog)
 	{
 		while (i < prog->params.nbr_philos)
 		{
+			prog->philos[i].strt_tm_micros = prog->strt_tm_micros; 
 			function_return = pthread_create(&prog->threads[i], NULL, philo_thread, (void *)&prog->philos[i]);
 			if (function_return != 0)
 				return(print_error("Error initializing philo threads\n"));

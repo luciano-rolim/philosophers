@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 11:14:42 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:35:46 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ static int philo_variables_init(t_prog *prog, t_philo *philo, int i)
 	philo->nbr = i + 1;
 	philo->prog = prog;
 	philo->last_meal = 0;
+	philo->surplus_time = 0;
 	philo->time_to_die = prog->params.time_to_die;
 	philo->time_to_eat = prog->params.time_to_eat;
 	philo->time_to_sleep = prog->params.time_to_sleep;

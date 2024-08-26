@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 11:14:29 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:39:48 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_philo
 {
 	int				nbr;
 	struct timeval	tmp_time;
+	long int		surplus_time;
 	pthread_mutex_t	*grab_first;
 	pthread_mutex_t	*grab_second;
 	int				start_position;
@@ -36,7 +37,7 @@ typedef struct s_philo
 	long int		last_meal;
 	int				even_prog;
 	void			*prog;
-	long int		strt_tm;
+	long int		strt_tm_micros;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -74,7 +75,7 @@ typedef struct s_prog
 	int				eat_ending_set;
 	int				all_alive;
 	int				wait_one_cicle;
-	long int		strt_tm;
+	long int		strt_tm_micros;
 }	t_prog;
 
 //Arg check functions
@@ -112,7 +113,10 @@ void		*lone_philo_thread(void *data);
 
 //Time functions
 long int	time_mls(void);
-long int	simulation_timestamp(long int start_time, struct timeval tmp_time);
+long int	simulation_timestamp(long int start_time, struct timeval tmp_time, t_philo *philo);
+long int	simulation_timestamp_2(long int start_time, struct timeval tmp_time);
 void		delay_to_start(t_philo *philo);
+long int	time_micros(void);
+long int	adjust_microseconds(long int total_time);
 
 #endif

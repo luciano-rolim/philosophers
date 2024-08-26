@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 10:50:32 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:40:09 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int all_alive(t_philo *philo)
 
 void	delay_to_start(t_philo *philo)
 {
-	while (time_mls() < philo->strt_tm)
+	while (time_micros() < philo->strt_tm_micros)
 		continue ;
 }
 
@@ -35,7 +35,7 @@ void	custom_write(t_philo *philo, char *message)
 		pthread_mutex_unlock(philo->mutex_print);
 		return ;
 	}
-	printf("%li %i %s", simulation_timestamp(philo->strt_tm, philo->tmp_time), philo->nbr, message);
+	printf("%li %i %s", simulation_timestamp(philo->strt_tm_micros, philo->tmp_time, philo), philo->nbr, message);
 	pthread_mutex_unlock(philo->mutex_print);
 }
 
@@ -71,21 +71,19 @@ void	write_fork_eat_action(t_philo *philo)
 		pthread_mutex_unlock(&philo->mutex_last_meal);
 		return ;
 	}
-	philo->last_meal = simulation_timestamp(philo->strt_tm, philo->tmp_time);
+	philo->last_meal = simulation_timestamp(philo->strt_tm_micros, philo->tmp_time, philo);
 	printf("%li %i has taken a fork\n%li %i is eating\n", philo->last_meal, philo->nbr, philo->last_meal, philo->nbr);
 	philo->must_eat--;
 	pthread_mutex_unlock(philo->mutex_print);
 	pthread_mutex_unlock(&philo->mutex_last_meal);
+	usleep(philo->time_to_eat - philo->surplus_time);
 }
 
 void	*philo_thread(void *data)
 {
 	t_philo	*philo;
-	t_prog	*prog;
 
 	philo = (t_philo *)data;
-	prog = (t_prog *)philo->prog;
-	philo->strt_tm = prog->strt_tm;
 	if (philo->start_position == 2)
 	{
 		delay_to_start(philo);
@@ -108,7 +106,6 @@ void	*philo_thread(void *data)
 		custom_write(philo, "has taken a fork\n");
 		pthread_mutex_lock(philo->grab_second);
 		write_fork_eat_action(philo);
-		usleep(philo->time_to_eat);
 		pthread_mutex_unlock(philo->grab_second);
 		pthread_mutex_unlock(philo->grab_first);
 		if (philo->eat_ending_set && !philo->must_eat)
@@ -127,7 +124,7 @@ void	*lone_philo_thread(void *data)
 
 	philo = (t_philo *)data;
 	prog = (t_prog *)philo->prog;
-	philo->strt_tm = prog->strt_tm;
+	philo->strt_tm_micros = prog->strt_tm_micros;
 	delay_to_start(philo);
 	custom_write(philo, "is thinking\n");
 	return (NULL);
@@ -144,7 +141,7 @@ void	*death_thread(void *data)
 	prog = (t_prog *)data;
 	no_deaths = 1;
 	active_philos = prog->params.nbr_philos;
-	while (time_mls() < prog->strt_tm)
+	while (time_micros() < prog->strt_tm_micros)
 		continue ;
 	while (no_deaths && active_philos)
 	{
@@ -157,11 +154,11 @@ void	*death_thread(void *data)
 				active_philos--;
 			else
 			{ 
-				if ((simulation_timestamp(prog->strt_tm, tmp_time) - (prog->philos[i].last_meal) >= prog->params.time_to_die_mls))
+				if ((simulation_timestamp_2(prog->strt_tm_micros, tmp_time) - (prog->philos[i].last_meal) >= prog->params.time_to_die_mls))
 				{
 					pthread_mutex_lock(&prog->mutexes.printing);
 					prog->all_alive = 0;
-					printf("%li %i died\n", simulation_timestamp(prog->strt_tm, tmp_time), prog->philos[i].nbr);
+					printf("%li %i died\n", simulation_timestamp_2(prog->strt_tm_micros, tmp_time), prog->philos[i].nbr);
 					pthread_mutex_unlock(&prog->mutexes.printing);
 					pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
 					no_deaths = 0;
