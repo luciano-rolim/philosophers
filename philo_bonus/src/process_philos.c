@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_philos.c                                    :+:      :+:    :+:   */
+/*   process_philos.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:53:44 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:15:05 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	write_fork_eat_action(t_philo *philo)
 	usleep(philo->time_to_eat);
 }
 
-static void	initial_set(t_philo *philo)
+static void	initial_delay(t_philo *philo)
 {
 	if (philo->start_position == 2)
 	{
@@ -73,14 +73,59 @@ static void	initial_set(t_philo *philo)
 		delay_to_start(philo);
 }
 
-void	*philo_thread(void *data)
+static int	philo_nbr_attribution(t_prog *prog)
 {
-	t_philo	*philo;
+	int i;
+	int	philo_nbr;
 
-	philo = (t_philo *)data;
-	initial_set(philo);
+	if (!prog)initial_delay
+	{
+		if (!prog->philo_attribution)
+		{
+			philo_nbr = i + 1;
+			sem_post(&prog->semaphores.counter);		
+			break;
+		}
+		else
+			i++;
+	}
+	sem_post(&prog->semaphores.counter);
+}
+
+static int	philo_init(t_prog *prog, t_philo *philo)
+{
+	if (!prog || !philo)
+		return (print_error("Error on philo_init call\n"));
+	if (!philo_variables_init(prog, philo))
+		return (0);
+	if (!grab_fork_order(prog, philo))
+		return (0);
+	if (!start_position(prog, philo))
+		return (0);
+	if (!calculus_wait_one_remaining(prog, philo))
+		return (0);
+	if (!mutex_init(&philo->mutex_last_meal))
+		return (0);
+	if (!calculus_time_to_think(prog, philo))
+		return (0);
+	return (1);
+}
+
+void	*philo_process(t_prog *prog, int i)
+{
+	t_philo	philo;
+	int		philo_nbr;
+
+
+	philo_nbr = philo_nbr_attribution(prog);
+	philo = prog->philos[i];
+	philo_init(prog, &philo);
+	initial_delay(&philo);
 	while (1)
 	{
+		sem_wait(prog->semaphores.forks);
+
+
 		pthread_mutex_lock(philo->grab_first);
 		custom_write(philo, "has taken a fork\n");
 		pthread_mutex_lock(philo->grab_second);
