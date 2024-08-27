@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:08:03 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:15:07 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,22 @@
 # include <sys/time.h>
 # include <stdlib.h>
 # include <limits.h>
-# include <fcntl.h>
-// # include <pthread.h>
+# include <pthread.h>
 # include <string.h>
 # include <signal.h>
 # include <time.h>
 # include <semaphore.h>
+# include <fcntl.h>
+
+# define  SEM_FORK_NAME "sem_fork"
+# define  SEM_PRINT_NAME "sem_print"
 
 typedef struct s_philo
 {
 	int				nbr;
 	struct timeval	tmp_time;
+	pthread_mutex_t	*grab_first;
+	pthread_mutex_t	*grab_second;
 	int				start_position;
 	int				wait_one_remaining;
 	int				max_wait_one_remaining;
@@ -44,6 +49,8 @@ typedef struct s_philo
 	long int		time_to_double_think;
 	int				*all_alive;
 	int				eat_ending_set;
+	pthread_mutex_t	mutex_last_meal;
+	pthread_mutex_t	*mutex_print;
 }	t_philo;
 
 typedef struct s_params
@@ -53,28 +60,34 @@ typedef struct s_params
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nbr_must_eat;
-	int				time_to_die_mls;
+	int				time_to_die_mls;	
 }	t_params;
 
-typedef struct s_semaphores
+typedef struct s_mutexes
 {
-	sem_t			counter;
+	pthread_mutex_t	printing;
+	pthread_mutex_t	forks;
+}	t_mutexes;
+
+typedef struct s_sems
+{
+	sem_t			forks;
 	sem_t			printing;
-	sem_t			*forks;
-}	t_semaphores;
+}	t_sems;
 
 typedef struct s_prog
 {
 	t_params		params;
-	t_semaphores	semaphores;
+	t_sems			sems;
+	t_mutexes		mutexes;
+	pthread_t		*threads;
 	t_philo			*philos;
-	int				*philo_attribution;
+	pthread_t		death_checker;
 	int				eat_ending_set;
 	int				all_alive;
 	int				no_deaths;
 	int				wait_one_cicle;
 	long int		strt_tm_micros;
-	int				counter;
 }	t_prog;
 
 //Arg check functions
@@ -83,6 +96,8 @@ int			extra_checks(t_prog *prog);
 
 //Cleaning functions
 void		clean_prog(t_prog *prog, char *message);
+void		unlink_sems(void);
+void		close_sems(t_prog *prog);
 
 //Num functions	return
 long int	custom_atol(char *str_number);
@@ -95,27 +110,27 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
-int			semaphore_init(sem_t *semaphore, char *name);
-// int			mutex_init(pthread_mutex_t *mutex);
+int			mutex_init(pthread_mutex_t *mutex);
 
 //Start philos functions
 int			calculus_wait_one_remaining(t_prog *prog, t_philo *philo);
 int			start_position(t_prog *prog, t_philo *philo);
-int			philo_variables_init(t_prog *prog, t_philo *philo);
+// int			grab_fork_order(t_prog *prog, t_philo *philo, int i);
+int			philo_variables_init(t_prog *prog, t_philo *philo, int i);
 int			calculus_time_to_think(t_prog *prog, t_philo *philo);
 
 //Start variables functions
 int			start_variables(t_prog *prog);
 
-//Philo related processes
-void		*death_process(t_prog *prog);
-void		*philo_process(void *data);
+//Philo thread functions
+void		*philo_thread(t_prog *prog, int i);
+void		*death_thread(void *data);
 
 //Other threads functions
-void		*lone_philo(void *data);
+void		*lone_philo(t_prog *prog, int i);
 
 //Thread utils functions
-void		custom_write(t_philo *philo, char *message);
+void		custom_write(t_philo *philo, char *message, t_prog *prog);
 
 //Time functions
 long int	timestamp(long int start_time, struct timeval tmp_time);

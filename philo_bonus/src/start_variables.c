@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:12:28 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:15:13 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	philo_variables_init(t_prog *prog, t_philo *philo, int i)
 		philo->eat_ending_set = 0;
 		philo->must_eat = -1;
 	}
-	philo->prog = prog;
 	philo->nbr = i + 1;
+	philo->prog = prog;
 	philo->last_meal = 0;
 	philo->time_to_die = prog->params.time_to_die;
 	philo->time_to_eat = prog->params.time_to_eat;
@@ -37,32 +37,71 @@ int	philo_variables_init(t_prog *prog, t_philo *philo, int i)
 	return (1);
 }
 
-static int	basic_semaphores_init(t_prog *prog)
+static int	philo_init(t_prog *prog, t_philo *philo, int i)
+{
+	if (!prog || !philo || i < 0)
+		return (print_error("Error on philo_init call\n"));
+	if (!philo_variables_init(prog, philo, i))
+		return (0);
+	// if (!grab_fork_order(prog, philo, i))
+	// 	return (0);
+	if (!start_position(prog, philo))
+		return (0);
+	if (!calculus_wait_one_remaining(prog, philo))
+		return (0);
+	if (!mutex_init(&philo->mutex_last_meal))
+		return (0);
+	if (!calculus_time_to_think(prog, philo))
+		return (0);
+	return (1);
+}
+
+// static int	basic_mutexes_init(t_prog *prog)
+// {
+// 	if (!prog)
+// 		return (0);
+// 	if (!mutex_init(&prog->mutexes.printing))
+// 		return (0);
+// 	return (1);
+// }
+
+static int	semaphore_init(sem_t *semaphore, char *name, int value)
+{
+	if (!semaphore || !name || value < 0)
+		return(print_error("Error on semaphore init call\n"));
+	semaphore = sem_open(name, O_CREAT, 0666, value);
+	if (semaphore == SEM_FAILED)
+		return(print_error("Error on sem_open function\n"));
+	return (1);
+}
+
+static int	basic_sems_init(t_prog *prog)
 {
 	if (!prog)
+		return(print_error("Error on basic sems init call"));
+	unlink_sems();
+	if (!semaphore_init(&prog->sems.printing, SEM_PRINT_NAME, 1))
 		return (0);
-	if (!semaphore_init(&prog->semaphores.printing))
-		return (0);
-	if (!semaphore_init(&prog->semaphores.counter))
+	if (!semaphore_init(&prog->sems.forks, SEM_FORK_NAME, prog->params.nbr_philos))
 		return (0);
 	return (1);
 }
 
 static int	mem_allocation(t_prog *prog)
 {
+	int	t_size;
 	int	p_size;
-	int	i_size;
-	int	s_size;
+	// int	m_size;
 
 	if (!prog)
 		return (print_error("Error on mem_allocation function call\n"));
+	t_size = sizeof(pthread_t);
 	p_size = sizeof(t_philo);
-	i_size = sizeof(int);
-	s_size = sizeof(sem_t);
-	prog->philo_attribution = ft_calloc(i_size, prog->params.nbr_philos);
+	// m_size = sizeof(pthread_mutex_t);
+	prog->threads = ft_calloc(t_size, prog->params.nbr_philos);
 	prog->philos = ft_calloc(p_size, prog->params.nbr_philos);
-	prog->semaphores.forks = ft_calloc(s_size, prog->params.nbr_philos);
-	if (!prog->philos || !prog->philo_attribution || !prog->semaphores.forks);
+	// prog->mutexes.forks = ft_calloc(m_size, prog->params.nbr_philos);
+	if (!prog->threads || !prog->philos /*|| !prog->mutexes.forks*/)
 		return (print_error("Error: Allocation failure\n"));
 	return (1);
 }
@@ -75,11 +114,16 @@ int	start_variables(t_prog *prog)
 		return (print_error("Error on start variables call\n"));
 	if (!mem_allocation(prog))
 		return (0);
-	if (!basic_mutexes_init(prog))
+	unlink_sems();
+	if (!basic_sems_init(prog))
 		return (0);
+	// if (!basic_mutexes_init(prog))
+	// 	return (0);
 	i = 0;
 	while (i < prog->params.nbr_philos)
 	{
+		if (!philo_init(prog, &prog->philos[i], i))
+			return (0);
 		// if (!mutex_init(&prog->mutexes.forks[i]))
 		// 	return (0);
 		i++;

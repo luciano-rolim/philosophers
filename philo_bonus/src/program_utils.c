@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:01:29 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:53:55 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,15 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (ptr);
 }
 
-int	semaphore_init(sem_t *semaphore, char *name)
+int	mutex_init(pthread_mutex_t *mutex)
 {
 	int	function_return;
 
-	if (!semaphore || !name)
-		return (print_error("Error on semaphore_init call\n"));
-	semaphore = sem_open(name, O_CREAT);
-	if (semaphore == SEM_FAILED)
-		return (print_error("Error initializing semaphore\n"));
+	if (!mutex)
+		return (print_error("Error on mutex_init call\n"));
+	function_return = -1;
+	function_return = pthread_mutex_init(mutex, NULL);
+	if (function_return != 0)
+		return (print_error("Error initializing mutex\n"));
 	return (1);
 }

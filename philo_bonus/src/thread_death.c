@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_death.c                                    :+:      :+:    :+:   */
+/*   thread_others.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 15:32:03 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:08:20 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:23:23 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,13 @@ static void	death_loop(t_prog *prog, int philos_on, int i)
 	}
 }
 
-void	*death_process(t_prog *prog)
+void	*death_thread(void *data)
 {
 	t_prog			*prog;
 	int				i;
 	int				philos_on;
 
+	prog = (t_prog *)data;
 	philos_on = prog->params.nbr_philos;
 	i = 0;
 	while (time_in_microseconds() < prog->strt_tm_micros)

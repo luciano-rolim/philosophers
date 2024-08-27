@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 14:10:57 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:09:35 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,51 +25,39 @@ static int	init_thread(pthread_t *thread, void *(*func) (void *), void *data)
 
 static int	start_program(t_prog *prog)
 {
-	int		i;
-	pid_t	pid;
+	int	i;
+	int	pid;
 
-	prog->strt_tm_micros = program_start_time(prog);
-	pid = fork();
-	{
-		if (pid < 0)
-			return(print_error("Error on fork function\n"));
-		else if (pid == 0)
-			death_process(prog);
-	}
 	i = 0;
-	while (i < prog->params.nbr_philos)
-	{
-		pid = fork();
-		if (pid < 0)
-			return(print_error("Error on fork function\n"));
-		else if (pid == 0)
-			philo_process(prog, i + 1);		
-	}
-}
-
-
-	if (!init_thread(&prog->death_checker, death_process, prog))
+	prog->strt_tm_micros = program_start_time(prog);
+	if (!init_thread(&prog->death_checker, death_thread, prog))
 		return (0);
-	if (prog->params.nbr_philos == 1)
-	{
-		if (!init_thread(&prog->threads[i], lone_philo, \
-		(void *)&prog->philos[i]))
-			return (0);
-	}
+	// if (prog->params.nbr_philos == 1)
+	// {
+	// 	if (!init_thread(&prog->threads[i], lone_philo, (void *)&prog->philos[i]))
+	// 		return (0);
+	// }
 	else
 	{
 		while (i < prog->params.nbr_philos)
 		{
 			prog->philos[i].strt_tm_micros = prog->strt_tm_micros;
-			if (!init_thread(&prog->threads[i], philo_process, \
-			(void *)&prog->philos[i]))
-				return (0);
-			i++;
+			pid = fork();
+			if (pid == -1)
+				return(print_error("Error on fork function\n"));
+			else if (pid == 0)
+			{
+				if (prog->params.nbr_philos == 1)
+					lone_philo(prog, i);
+				else
+					philo_thread(prog, i);					
+			}
+			else
+				i++;
+			// if (!init_thread(&prog->threads[i], philo_thread, (void *)&prog->philos[i]))
+			// 	return (0);
 		}
 	}
-
-
-
 	return (1);
 }
 

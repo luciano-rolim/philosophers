@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 11:20:35 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:12:04 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,33 @@ static void	clean_threads(t_prog *prog)
 		free(prog->threads);
 }
 
-static void	clean_mutexes(t_prog *prog)
-{
-	int	i;
+// static void	clean_mutexes(t_prog *prog)
+// {
+// 	int	i;
 
-	if (!prog)
-		return ;
-	if (prog->params.nbr_philos != -1)
-	{
-		i = 0;
-		while (i < prog->params.nbr_philos)
-			pthread_mutex_destroy(&prog->mutexes.forks[i++]);
-	}
-	if (prog->mutexes.forks)
-		free(prog->mutexes.forks);
-	pthread_mutex_destroy(&prog->mutexes.printing);
+// 	if (!prog)
+// 		return ;
+// 	if (prog->params.nbr_philos != -1)
+// 	{
+// 		i = 0;
+// 		while (i < prog->params.nbr_philos)
+// 			pthread_mutex_destroy(&prog->mutexes.forks[i++]);
+// 	}
+// 	if (prog->mutexes.forks)
+// 		free(prog->mutexes.forks);
+// 	pthread_mutex_destroy(&prog->mutexes.printing);
+// }
+
+void	unlink_sems(void)
+{
+	sem_unlink(SEM_FORK_NAME);
+	sem_unlink(SEM_PRINT_NAME);
+}
+
+void	close_sems(t_prog *prog)
+{
+	sem_close(&prog->sems.forks);
+	sem_close(&prog->sems.printing);
 }
 
 void	clean_prog(t_prog *prog, char *message)
@@ -56,11 +68,11 @@ void	clean_prog(t_prog *prog, char *message)
 	pthread_join(prog->death_checker, NULL);
 	if (prog->threads)
 		clean_threads(prog);
-	clean_mutexes(prog);
+	// clean_mutexes(prog);
 	if (prog->philos)
 		free(prog->philos);
-	if (prog->philo_attribution)
-		free(prog->philo_attribution);
+	close_sems(prog);
+	unlink_sems();
 	if (message)
 		printf("%s\n", message);
 }
