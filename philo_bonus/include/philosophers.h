@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 17:15:07 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:18:40 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <stdlib.h>
 # include <limits.h>
 # include <pthread.h>
@@ -25,15 +27,13 @@
 # include <semaphore.h>
 # include <fcntl.h>
 
-# define  SEM_FORK_NAME "sem_fork"
-# define  SEM_PRINT_NAME "sem_print"
+# define  SEM_FORK_NAME "/sem_fork"
+# define  SEM_PRINT_NAME "/sem_print"
 
 typedef struct s_philo
 {
 	int				nbr;
 	struct timeval	tmp_time;
-	pthread_mutex_t	*grab_first;
-	pthread_mutex_t	*grab_second;
 	int				start_position;
 	int				wait_one_remaining;
 	int				max_wait_one_remaining;
@@ -49,8 +49,8 @@ typedef struct s_philo
 	long int		time_to_double_think;
 	int				*all_alive;
 	int				eat_ending_set;
-	pthread_mutex_t	mutex_last_meal;
-	pthread_mutex_t	*mutex_print;
+	char			*sem_name_last_meal;
+	sem_t			*sem_last_meal;
 }	t_philo;
 
 typedef struct s_params
@@ -63,29 +63,21 @@ typedef struct s_params
 	int				time_to_die_mls;	
 }	t_params;
 
-typedef struct s_mutexes
-{
-	pthread_mutex_t	printing;
-	pthread_mutex_t	forks;
-}	t_mutexes;
-
 typedef struct s_sems
 {
-	sem_t			forks;
-	sem_t			printing;
+	sem_t			*forks;
+	sem_t			*printing;
 }	t_sems;
 
 typedef struct s_prog
 {
 	t_params		params;
 	t_sems			sems;
-	t_mutexes		mutexes;
 	pthread_t		*threads;
 	t_philo			*philos;
 	pthread_t		death_checker;
 	int				eat_ending_set;
 	int				all_alive;
-	int				no_deaths;
 	int				wait_one_cicle;
 	long int		strt_tm_micros;
 }	t_prog;
@@ -110,7 +102,6 @@ int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
 void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
-int			mutex_init(pthread_mutex_t *mutex);
 
 //Start philos functions
 int			calculus_wait_one_remaining(t_prog *prog, t_philo *philo);
@@ -123,7 +114,7 @@ int			calculus_time_to_think(t_prog *prog, t_philo *philo);
 int			start_variables(t_prog *prog);
 
 //Philo thread functions
-void		*philo_thread(t_prog *prog, int i);
+void		*philo_process(t_prog *prog, int i);
 void		*death_thread(void *data);
 
 //Other threads functions
@@ -137,5 +128,12 @@ long int	timestamp(long int start_time, struct timeval tmp_time);
 long int	time_in_microseconds(void);
 long int	program_start_time(t_prog *prog);
 void		delay_to_start(t_philo *philo);
+
+//bonus stuff
+char*		custom_itoa(int num);
+int			exit_gracefully(t_prog *prog, t_philo *philo);
+int			init_thread(pthread_t *thread, void *(*func) (void *), void *data);
+void		children_open_sems(t_prog *prog, t_philo *philo);
+void		children_close_sems(t_prog *prog, t_philo *philo);
 
 #endif

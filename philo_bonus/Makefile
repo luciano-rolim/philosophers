@@ -6,7 +6,7 @@
 #    By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 12:12:03 by lmeneghe          #+#    #+#              #
-#    Updated: 2024/08/27 10:23:39 by lmeneghe         ###   ########.fr        #
+#    Updated: 2024/08/28 11:41:27 by lmeneghe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,13 +15,13 @@ NAME            = philo
 
 # Compiler and Flags
 CC              = gcc
-CFLAGS          = -Wall -Wextra -Werror -pthread -O3
+CFLAGS          = -Wall #-Wextra -Werror -pthread */ -O3
 
 # Source Files
 SRC_FILES       =	src/arg_check_extra.c src/arg_check.c src/basic_utils.c \
 					src/cleaning.c src/main.c src/program_utils.c \
 					src/start_philos.c src/start_variables.c \
-					src/thread_philos.c src/thread_death.c src/thread_utils.c \
+					src/process_philos.c src/thread_death.c src/process_utils.c \
 					src/time.c
 
 # Object files

@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 15:11:00 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:23:40 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	philo_variables_init(t_prog *prog, t_philo *philo, int i)
 		philo->must_eat = -1;
 	}
 	philo->nbr = i + 1;
-	philo->prog = prog;
 	philo->last_meal = 0;
 	philo->time_to_die = prog->params.time_to_die;
 	philo->time_to_eat = prog->params.time_to_eat;

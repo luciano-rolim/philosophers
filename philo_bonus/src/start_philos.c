@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:56:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 17:13:17 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 10:30:52 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,31 +52,6 @@ int	start_position(t_prog *prog, t_philo *philo)
 	}
 	return (1);
 }
-
-// int	grab_fork_order(t_prog *prog, t_philo *philo, int i)
-// {
-// 	int	index;
-// 	int	index_next;
-
-// 	if (!prog || !philo || i < 0)
-// 		return (print_error("Error on grab_fork_order call\n"));
-// 	index = i;
-// 	if (i == (prog->params.nbr_philos - 1))
-// 		index_next = 0;
-// 	else
-// 		index_next = i + 1;
-// 	if (is_even(philo->nbr))
-// 	{
-// 		// philo->grab_first = &prog->mutexes.forks[index_next];
-// 		// philo->grab_second = &prog->mutexes.forks[index];
-// 	}
-// 	else
-// 	{
-// 		// philo->grab_first = &prog->mutexes.forks[index];
-// 		// philo->grab_second = &prog->mutexes.forks[index_next];
-// 	}
-// 	return (1);
-// }
 
 int	odd_calculus_think_time(t_philo *philo)
 {

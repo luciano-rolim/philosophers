@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_philos.c                                    :+:      :+:    :+:   */
+/*   process_philos.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 17:19:09 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:59:52 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,14 @@ void	think_action(t_philo *philo, t_prog *prog)
 
 void	write_fork_eat_action(t_philo *philo, t_prog *prog)
 {
-	pthread_mutex_lock(&philo->mutex_last_meal);
-	sem_wait(&prog->sems.printing);
-	// pthread_mutex_lock(philo->mutex_print);
-	if (!(*philo->all_alive))
-	{
-		philo->eat_ending_set = 1;
-		philo->must_eat = 0;
-		pthread_mutex_unlock(philo->mutex_print);
-		pthread_mutex_unlock(&philo->mutex_last_meal);
-		return ;
-	}
+	sem_wait(philo->sem_last_meal);
+	sem_wait(prog->sems.printing);
 	philo->last_meal = timestamp(philo->strt_tm_micros, philo->tmp_time);
 	printf("%li %i has taken a fork\n%li %i is eating\n", \
 	philo->last_meal, philo->nbr, philo->last_meal, philo->nbr);
 	philo->must_eat--;
-	sem_post(&prog->sems.printing);
-	// pthread_mutex_unlock(philo->mutex_print);
-	pthread_mutex_unlock(&philo->mutex_last_meal);
+	sem_post(prog->sems.printing);
+	sem_post(philo->sem_last_meal);
 	usleep(philo->time_to_eat);
 }
 
@@ -75,30 +65,52 @@ static void	initial_set(t_philo *philo, t_prog *prog)
 		delay_to_start(philo);
 }
 
-void	*philo_thread(t_prog *prog, int i)
+void children_close_sems(t_prog *prog, t_philo *philo)
+{
+	sem_close(prog->sems.forks);
+	sem_close(prog->sems.printing);
+	sem_close(philo->sem_last_meal);
+}
+
+void children_open_sems(t_prog *prog, t_philo *philo)
+{
+	prog->sems.forks = sem_open(SEM_FORK_NAME, 0);
+	prog->sems.printing = sem_open(SEM_PRINT_NAME, 0);
+	philo->sem_last_meal = sem_open(philo->sem_name_last_meal, 0);
+}
+
+int	init_thread(pthread_t *thread, void *(*func) (void *), void *data)
+{
+	int	function_return;
+
+	function_return = -1;
+	function_return = pthread_create(thread, NULL, func, data);
+	if (function_return != 0)
+		return (print_error("Error initializing thread\n"));
+	return (1);
+}
+
+void	*philo_process(t_prog *prog, int i)
 {
 	t_philo	*philo;
 
 	philo = &prog->philos[i];
+	children_open_sems(prog, philo);
+	pthread_create(&prog->death_checker, NULL, death_thread, philo);
 	initial_set(philo, prog);
 	while (1)
 	{
-		sem_wait(&prog->sems.forks);
-		sem_wait(&prog->sems.forks);
+		sem_wait(prog->sems.forks);
 		custom_write(philo, "has taken a fork\n", prog);
-		// pthread_mutex_lock(philo->grab_first);
-		// pthread_mutex_lock(philo->grab_second);
+		sem_wait(prog->sems.forks);
 		write_fork_eat_action(philo, prog);
-		sem_post(&prog->sems.forks);
-		sem_post(&prog->sems.forks);
-		// pthread_mutex_unlock(philo->grab_second);
-		// pthread_mutex_unlock(philo->grab_first);
+		sem_post(prog->sems.forks);
+		sem_post(prog->sems.forks);
 		if (philo->eat_ending_set && !philo->must_eat)
-			break ;
+			exit_gracefully(prog, philo);
 		custom_write(philo, "is sleeping\n", prog);
 		usleep(philo->time_to_sleep);
 		think_action(philo, prog);
 	}
-	close_sems(prog);
-	exit(0);
+	exit (1);
 }

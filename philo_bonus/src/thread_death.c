@@ -1,68 +1,73 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   thread_others.c                                    :+:      :+:    :+:   */
+/*   thread_death.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 15:32:03 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 10:23:23 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:52:28 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static void	death_execution(t_prog *prog, struct timeval tmp_time, int i)
+int exit_gracefully(t_prog *prog, t_philo *philo)
 {
-	pthread_mutex_lock(&prog->mutexes.printing);
-	prog->all_alive = 0;
-	printf("%li %i died\n", \
-	timestamp(prog->strt_tm_micros, tmp_time), prog->philos[i].nbr);
-	pthread_mutex_unlock(&prog->mutexes.printing);
-	pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
-	prog->no_deaths = 0;
+	pthread_join(prog->death_checker, NULL);
+	children_close_sems(prog, philo);
+	exit(EXIT_SUCCESS);
 }
 
-static void	death_loop(t_prog *prog, int philos_on, int i)
+int exit_starvation(t_prog *prog, t_philo *philo)
+{
+	children_close_sems(prog, philo);
+	exit(EXIT_FAILURE);
+}
+
+static void	death_execution(t_prog *prog, struct timeval tmp_time, t_philo *philo)
+{
+	sem_wait(prog->sems.printing);
+	printf("%li %i died\n", timestamp(prog->strt_tm_micros, tmp_time), philo->nbr);
+	// sem_post(prog->sems.printing);
+}
+
+static void	death_loop(t_philo *philo, t_prog *prog)
 {
 	struct timeval	tmp_time;
 
-	while (prog->no_deaths && philos_on)
+	while (1)
 	{
-		i = 0;
-		philos_on = prog->params.nbr_philos;
-		while (i < prog->params.nbr_philos)
+		sem_wait(philo->sem_last_meal);
+		if (philo->eat_ending_set && !philo->must_eat)
 		{
-			pthread_mutex_lock(&prog->philos[i].mutex_last_meal);
-			if ((prog->params.nbr_must_eat != -1) && !prog->philos[i].must_eat)
-				philos_on--;
-			else
-			{
-				if ((timestamp(prog->strt_tm_micros, tmp_time) \
-				- (prog->philos[i].last_meal) >= prog->params.time_to_die_mls))
-				{
-					death_execution(prog, tmp_time, i);
-					break ;
-				}
-			}
-			pthread_mutex_unlock(&prog->philos[i].mutex_last_meal);
-			i++;
+			sem_post(philo->sem_last_meal);
+			break ;
 		}
-		usleep(1);
+		else
+		{
+			if ((timestamp(philo->strt_tm_micros, tmp_time) \
+			- (philo->last_meal) >= prog->params.time_to_die_mls))
+			{
+				death_execution(prog, tmp_time, philo);
+				sem_post(philo->sem_last_meal);
+				exit_starvation(prog, philo);
+			}
+		}
+		sem_post(philo->sem_last_meal);
+		usleep(300);
 	}
 }
 
 void	*death_thread(void *data)
 {
-	t_prog			*prog;
-	int				i;
-	int				philos_on;
-
-	prog = (t_prog *)data;
-	philos_on = prog->params.nbr_philos;
-	i = 0;
+	t_philo		*philo;
+	t_prog		*prog;
+	
+	philo = (t_philo *)data;
+	prog = (t_prog *)philo->prog;
 	while (time_in_microseconds() < prog->strt_tm_micros)
 		continue ;
-	death_loop(prog, philos_on, i);
+	death_loop(philo, prog);
 	return (NULL);
 }

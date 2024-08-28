@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 14:53:55 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:45:03 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,17 +71,4 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	while (i < full_size)
 		((unsigned char *)ptr)[i++] = 0;
 	return (ptr);
-}
-
-int	mutex_init(pthread_mutex_t *mutex)
-{
-	int	function_return;
-
-	if (!mutex)
-		return (print_error("Error on mutex_init call\n"));
-	function_return = -1;
-	function_return = pthread_mutex_init(mutex, NULL);
-	if (function_return != 0)
-		return (print_error("Error initializing mutex\n"));
-	return (1);
 }

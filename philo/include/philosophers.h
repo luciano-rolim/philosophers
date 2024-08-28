@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:53:48 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:20:47 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_philo
 	int				must_eat;
 	long int		last_meal;
 	int				even_prog;
-	void			*prog;
+	// void			*prog;
 	long int		strt_tm_micros;
 	int				time_to_die;
 	int				time_to_eat;

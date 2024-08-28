@@ -6,57 +6,56 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 17:09:35 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 13:30:19 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static int	init_thread(pthread_t *thread, void *(*func) (void *), void *data)
-{
-	int	function_return;
-
-	function_return = -1;
-	function_return = pthread_create(thread, NULL, func, data);
-	if (function_return != 0)
-		return (print_error("Error initializing thread\n"));
-	return (1);
-}
-
 static int	start_program(t_prog *prog)
 {
-	int	i;
-	int	pid;
+	int		i;
+    int		status;
+	int		running_children;
+    pid_t	pid;
+	pid_t	pids[prog->params.nbr_philos];
 
 	i = 0;
 	prog->strt_tm_micros = program_start_time(prog);
-	if (!init_thread(&prog->death_checker, death_thread, prog))
-		return (0);
-	// if (prog->params.nbr_philos == 1)
-	// {
-	// 	if (!init_thread(&prog->threads[i], lone_philo, (void *)&prog->philos[i]))
-	// 		return (0);
-	// }
-	else
+	while (i < prog->params.nbr_philos)
 	{
-		while (i < prog->params.nbr_philos)
+		prog->philos[i].strt_tm_micros = prog->strt_tm_micros;
+		pids[i] = fork();
+		if (pids[i] == -1)
+			return(print_error("Error on fork function\n"));
+		else if (pids[i] == 0)
 		{
-			prog->philos[i].strt_tm_micros = prog->strt_tm_micros;
-			pid = fork();
-			if (pid == -1)
-				return(print_error("Error on fork function\n"));
-			else if (pid == 0)
-			{
-				if (prog->params.nbr_philos == 1)
-					lone_philo(prog, i);
-				else
-					philo_thread(prog, i);					
-			}
+			if (prog->params.nbr_philos == 1)
+				lone_philo(prog, i);
 			else
-				i++;
-			// if (!init_thread(&prog->threads[i], philo_thread, (void *)&prog->philos[i]))
-			// 	return (0);
+				philo_process(prog, i);					
 		}
+		else
+			i++;
+	}
+	i = 0;
+	running_children = prog->params.nbr_philos;
+	while (running_children != 0)
+	{
+		pid = waitpid(-1, &status, 0);
+		status = WEXITSTATUS(status);
+		if (status != 0)
+		{
+			while (i < prog->params.nbr_philos)
+			{
+				if (pids[i] != pid)
+					kill(pids[i], SIGKILL);
+				i++;
+			}
+			break ;
+		}
+		else
+			running_children--;
 	}
 	return (1);
 }

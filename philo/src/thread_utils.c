@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 16:00:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 10:29:39 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:24:37 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,8 @@ void	custom_write(t_philo *philo, char *message)
 void	*lone_philo(void *data)
 {
 	t_philo	*philo;
-	t_prog	*prog;
 
 	philo = (t_philo *)data;
-	prog = (t_prog *)philo->prog;
-	philo->strt_tm_micros = prog->strt_tm_micros;
 	delay_to_start(philo);
 	custom_write(philo, "is thinking\n");
 	return (NULL);

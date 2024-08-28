@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 15:31:12 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 11:22:24 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static int	start_program(t_prog *prog)
 		return (0);
 	if (prog->params.nbr_philos == 1)
 	{
+		prog->philos[i].strt_tm_micros = prog->strt_tm_micros;
 		if (!init_thread(&prog->threads[i], lone_philo, \
 		(void *)&prog->philos[i]))
 			return (0);
