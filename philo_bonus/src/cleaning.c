@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 18:21:08 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 12:25:28 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:32:08 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	unlink_sems(void)
 	sem_unlink(SEM_PRINT_NAME);
 }
 
-void	parent_close_sems(t_prog *prog)
+static void	parent_close_sems(t_prog *prog)
 {
 	sem_close(prog->sems.forks);
 	sem_close(prog->sems.printing);
@@ -28,8 +28,6 @@ void	clean_prog(t_prog *prog, char *message)
 {
 	if (!prog)
 		return ;
-	if (prog->philos)
-		free(prog->philos);
 	parent_close_sems(prog);
 	unlink_sems();
 	if (message)

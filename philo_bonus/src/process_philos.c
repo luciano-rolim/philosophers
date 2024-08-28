@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 13:59:52 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:33:30 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,9 @@ void	*philo_process(t_prog *prog, int i)
 {
 	t_philo	*philo;
 
-	philo = &prog->philos[i];
+	philo = &prog->philo;
+	philo->strt_tm_micros = prog->strt_tm_micros;
+	philo_init(prog, &prog->philo, i);
 	children_open_sems(prog, philo);
 	pthread_create(&prog->death_checker, NULL, death_thread, philo);
 	initial_set(philo, prog);

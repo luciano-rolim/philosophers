@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 13:18:40 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:34:29 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_prog
 	t_params		params;
 	t_sems			sems;
 	pthread_t		*threads;
-	t_philo			*philos;
+	t_philo			philo;
 	pthread_t		death_checker;
 	int				eat_ending_set;
 	int				all_alive;
@@ -89,7 +89,6 @@ int			extra_checks(t_prog *prog);
 //Cleaning functions
 void		clean_prog(t_prog *prog, char *message);
 void		unlink_sems(void);
-void		close_sems(t_prog *prog);
 
 //Num functions	return
 long int	custom_atol(char *str_number);
@@ -135,5 +134,6 @@ int			exit_gracefully(t_prog *prog, t_philo *philo);
 int			init_thread(pthread_t *thread, void *(*func) (void *), void *data);
 void		children_open_sems(t_prog *prog, t_philo *philo);
 void		children_close_sems(t_prog *prog, t_philo *philo);
+int			philo_init(t_prog *prog, t_philo *philo, int i);
 
 #endif

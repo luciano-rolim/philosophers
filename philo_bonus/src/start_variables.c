@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 14:57:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 11:46:58 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:34:21 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	semaphore_init(sem_t **semaphore, char *name, int value)
 	return (1);
 }
 
-static int	philo_init(t_prog *prog, t_philo *philo, int i)
+int	philo_init(t_prog *prog, t_philo *philo, int i)
 {
 	if (!prog || !philo || i < 0)
 		return (print_error("Error on philo_init call\n"));
@@ -114,36 +114,36 @@ static int	basic_sems_init(t_prog *prog)
 	return (1);
 }
 
-static int	mem_allocation(t_prog *prog)
-{
-	int	p_size;
+// static int	mem_allocation(t_prog *prog)
+// {
+// 	int	p_size;
 
-	if (!prog)
-		return (print_error("Error on mem_allocation function call\n"));
-	p_size = sizeof(t_philo);
-	prog->philos = ft_calloc(p_size, prog->params.nbr_philos);
-	if (!prog->philos)
-		return (print_error("Error: Allocation failure\n"));
-	return (1);
-}
+// 	if (!prog)
+// 		return (print_error("Error on mem_allocation function call\n"));
+// 	p_size = sizeof(t_philo);
+// 	prog->philos = ft_calloc(p_size, prog->params.nbr_philos);
+// 	if (!prog->philos)
+// 		return (print_error("Error: Allocation failure\n"));
+// 	return (1);
+// }
 
 int	start_variables(t_prog *prog)
 {
-	int				i;
+	// int				i;
 
 	if (!prog)
 		return (print_error("Error on start variables call\n"));
-	if (!mem_allocation(prog))
-		return (0);
+	// if (!mem_allocation(prog))
+	// 	return (0);
 	unlink_sems();
 	if (!basic_sems_init(prog))
 		return (0);
-	i = 0;
-	while (i < prog->params.nbr_philos)
-	{
-		if (!philo_init(prog, &prog->philos[i], i))
-			return (0);
-		i++;
-	}
+	// i = 0;
+	// while (i < prog->params.nbr_philos)
+	// {
+	// 	if (!philo_init(prog, &prog->philos[i], i))
+	// 		return (0);
+	// 	i++;
+	// }
 	return (1);
 }

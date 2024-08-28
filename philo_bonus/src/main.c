@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 13:30:19 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:32:50 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static int	start_program(t_prog *prog)
 	prog->strt_tm_micros = program_start_time(prog);
 	while (i < prog->params.nbr_philos)
 	{
-		prog->philos[i].strt_tm_micros = prog->strt_tm_micros;
 		pids[i] = fork();
 		if (pids[i] == -1)
 			return(print_error("Error on fork function\n"));

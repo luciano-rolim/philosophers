@@ -6,12 +6,12 @@
 #    By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 12:12:03 by lmeneghe          #+#    #+#              #
-#    Updated: 2024/08/28 11:41:27 by lmeneghe         ###   ########.fr        #
+#    Updated: 2024/08/28 14:00:58 by lmeneghe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Program name
-NAME            = philo
+NAME            = philo_bonus
 
 # Compiler and Flags
 CC              = gcc

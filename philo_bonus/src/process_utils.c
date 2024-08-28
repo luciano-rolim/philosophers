@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 16:00:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 13:08:49 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:39:05 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ void	*lone_philo(t_prog *prog, int i)
 {
 	t_philo	*philo;
 
-	philo = &prog->philos[i];
+	philo = &prog->philo;
+	philo->strt_tm_micros = prog->strt_tm_micros;
+	philo_init(prog, &prog->philo, i);
 	prog->sems.printing = sem_open(SEM_PRINT_NAME, 0);
 	delay_to_start(philo);
 	custom_write(philo, "is thinking\n", prog);
