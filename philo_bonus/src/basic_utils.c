@@ -6,31 +6,42 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 15:02:42 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 11:45:24 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 17:11:09 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-char*	custom_itoa(int num) 
+char	*custom_itoa(int num)
 {
-    char* str = malloc(12);
-    if (!str)
-        return NULL;
-    int i = 0;
-    do {
-        str[i++] = num % 10 + '0'; // Get the last digit and convert it to character
-        num /= 10; // Remove the last digit from the number
-    } while (num > 0);
-    str[i] = '\0'; // Null-terminate the string
-    // Reverse the string as it is currently backwards
-    for (int start = 0, end = i - 1; start < end; start++, end--) 
+	int		start;
+	int		i;
+	int		end;
+	char	tmp;
+	char	*str;
+
+	i = 0;
+	str = (NULL);
+	str = malloc(MAX_INT_LENGHT);
+	if (!str)
+		return (NULL);
+	while (num > 0)
 	{
-        char temp = str[start];
-        str[start] = str[end];
-        str[end] = temp;
-    }
-    return str;
+		str[i++] = num % 10 + '0';
+		num /= 10;
+	}
+	str[i] = '\0';
+	start = 0;
+	end = i - 1;
+	while (start < end)
+	{
+		tmp = str[start];
+		str[start] = str[end];
+		str[end] = tmp;
+		start++;
+		end--;
+	}
+	return (str);
 }
 
 long int	custom_atol(char *str_number)

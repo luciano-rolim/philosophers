@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 14:53:55 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:52:47 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,6 @@ int	print_error(char *message)
 		return (0);
 	printf("%s", message);
 	return (0);
-}
-
-void	*print_error_pointer(char *message)
-{
-	if (!message)
-		return (NULL);
-	printf("%s", message);
-	return (NULL);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)

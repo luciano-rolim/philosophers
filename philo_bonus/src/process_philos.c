@@ -6,13 +6,13 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 14:33:30 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 17:09:56 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-void	think_action(t_philo *philo, t_prog *prog)
+static void	think_action(t_philo *philo, t_prog *prog)
 {
 	custom_write(philo, "is thinking\n", prog);
 	if (philo->even_prog)
@@ -32,7 +32,7 @@ void	think_action(t_philo *philo, t_prog *prog)
 	}
 }
 
-void	write_fork_eat_action(t_philo *philo, t_prog *prog)
+static void	write_fork_eat_action(t_philo *philo, t_prog *prog)
 {
 	sem_wait(philo->sem_last_meal);
 	sem_wait(prog->sems.printing);
@@ -52,41 +52,40 @@ static void	initial_set(t_philo *philo, t_prog *prog)
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n", prog);
 		if (philo->time_to_eat > 0)
-			usleep(philo->time_to_eat - 900);
+			usleep(philo->time_to_eat - TIME_REDUCE);
 	}
 	else if (philo->start_position == 3)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n", prog);
 		if (philo->time_to_eat > 0)
-			usleep((philo->time_to_eat * 2) - 900);
+			usleep((philo->time_to_eat * 2) - TIME_REDUCE);
 	}
 	else
 		delay_to_start(philo);
 }
 
-void children_close_sems(t_prog *prog, t_philo *philo)
+int	philo_init(t_prog *prog, t_philo *philo, int i)
 {
-	sem_close(prog->sems.forks);
-	sem_close(prog->sems.printing);
-	sem_close(philo->sem_last_meal);
-}
+	char	*tmp_str;
 
-void children_open_sems(t_prog *prog, t_philo *philo)
-{
-	prog->sems.forks = sem_open(SEM_FORK_NAME, 0);
-	prog->sems.printing = sem_open(SEM_PRINT_NAME, 0);
-	philo->sem_last_meal = sem_open(philo->sem_name_last_meal, 0);
-}
-
-int	init_thread(pthread_t *thread, void *(*func) (void *), void *data)
-{
-	int	function_return;
-
-	function_return = -1;
-	function_return = pthread_create(thread, NULL, func, data);
-	if (function_return != 0)
-		return (print_error("Error initializing thread\n"));
+	if (!prog || !philo || i < 0)
+		return (print_error("Error on philo_init call\n"));
+	if (!philo_variables_init(prog, philo, i))
+		return (0);
+	if (!start_position(prog, philo))
+		return (0);
+	if (!calculus_wait_one_remaining(prog, philo))
+		return (0);
+	if (!calculus_time_to_think(prog, philo))
+		return (0);
+	tmp_str = custom_itoa(philo->nbr);
+	philo->sem_name_last_meal = ft_strjoin("/sem_meal_", tmp_str);
+	if (tmp_str)
+		free(tmp_str);
+	sem_unlink(philo->sem_name_last_meal);
+	if (!semaphore_init(&philo->sem_last_meal, philo->sem_name_last_meal, 1))
+		return (0);
 	return (1);
 }
 
@@ -97,7 +96,6 @@ void	*philo_process(t_prog *prog, int i)
 	philo = &prog->philo;
 	philo->strt_tm_micros = prog->strt_tm_micros;
 	philo_init(prog, &prog->philo, i);
-	children_open_sems(prog, philo);
 	pthread_create(&prog->death_checker, NULL, death_thread, philo);
 	initial_set(philo, prog);
 	while (1)

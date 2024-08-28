@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 10:05:55 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 11:45:03 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 15:37:03 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,35 +40,41 @@ int	print_error(char *message)
 	return (0);
 }
 
-void	*print_error_pointer(char *message)
+static size_t	ft_strlen(const char *s)
 {
-	if (!message)
-		return (NULL);
-	printf("%s", message);
-	return (NULL);
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+char	*ft_strjoin(char const *prefix, char const *suffix)
 {
-	size_t	full_size;
+	size_t	size;
 	size_t	i;
-	void	*ptr;
+	size_t	j;
+	char	*new_str;
 
-	if (nmemb == 0 || size == 0)
-	{
-		ptr = malloc(0);
-		if (!ptr)
-			return (NULL);
-		return (ptr);
-	}
-	full_size = nmemb * size;
-	if (full_size / size != nmemb)
+	if (!prefix || !suffix)
 		return (NULL);
-	ptr = malloc(full_size);
-	if (!ptr)
+	size = ft_strlen(prefix) + ft_strlen(suffix) + 1;
+	new_str = malloc(size);
+	if (new_str == NULL)
 		return (NULL);
 	i = 0;
-	while (i < full_size)
-		((unsigned char *)ptr)[i++] = 0;
-	return (ptr);
+	while (prefix[i])
+	{
+		new_str[i] = prefix[i];
+		i++;
+	}
+	j = 0;
+	while (suffix[j])
+	{
+		new_str[i + j] = suffix[j];
+		j++;
+	}
+	new_str[i + j] = '\0';
+	return (new_str);
 }

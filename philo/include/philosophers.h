@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 11:20:47 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:52:42 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <signal.h>
 # include <time.h>
+
+# define TIME_REDUCE 900
 
 typedef struct s_philo
 {
@@ -82,19 +84,18 @@ typedef struct s_prog
 int			check_arguments(t_prog *prog, int argc, char **argv);
 int			extra_checks(t_prog *prog);
 
-//Cleaning functions
-void		clean_prog(t_prog *prog, char *message);
-
-//Num functions	return
+//Basic utils functions
 long int	custom_atol(char *str_number);
 int			is_even(int nbr);
 int			is_num_digit(char c);
 int			string_len(char *s);
 
+//Cleaning functions
+void		clean_prog(t_prog *prog, char *message);
+
 //Program utils
 int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
-void		*print_error_pointer(char *message);
 void		*ft_calloc(size_t nmemb, size_t size);
 int			mutex_init(pthread_mutex_t *mutex);
 

@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 12:33:22 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/27 15:53:44 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:46:53 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ static void	initial_set(t_philo *philo)
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
-			usleep(philo->time_to_eat - 900);
+			usleep(philo->time_to_eat - TIME_REDUCE);
 	}
 	else if (philo->start_position == 3)
 	{
 		delay_to_start(philo);
 		custom_write(philo, "is thinking\n");
 		if (philo->time_to_eat > 0)
-			usleep((philo->time_to_eat * 2) - 900);
+			usleep((philo->time_to_eat * 2) - TIME_REDUCE);
 	}
 	else
 		delay_to_start(philo);

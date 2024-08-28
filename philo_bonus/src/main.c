@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 14:32:50 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 17:08:16 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static int	start_program(t_prog *prog)
 {
 	int		i;
-    int		status;
+	int		status;
 	int		running_children;
-    pid_t	pid;
+	pid_t	pid;
 	pid_t	pids[prog->params.nbr_philos];
 
 	i = 0;
@@ -26,13 +26,13 @@ static int	start_program(t_prog *prog)
 	{
 		pids[i] = fork();
 		if (pids[i] == -1)
-			return(print_error("Error on fork function\n"));
+			return (print_error("Error on fork function\n"));
 		else if (pids[i] == 0)
 		{
 			if (prog->params.nbr_philos == 1)
 				lone_philo(prog, i);
 			else
-				philo_process(prog, i);					
+				philo_process(prog, i);
 		}
 		else
 			i++;

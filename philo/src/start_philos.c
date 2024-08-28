@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 14:56:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/26 15:10:53 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 14:46:53 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,15 @@ int	odd_calculus_think_time(t_philo *philo)
 	if (philo->time_to_eat > philo->time_to_sleep)
 	{
 		philo->time_to_think = \
-		((philo->time_to_eat - philo->time_to_sleep) - 900);
+		((philo->time_to_eat - philo->time_to_sleep) - TIME_REDUCE);
 		philo->time_to_double_think = \
-		((philo->time_to_eat * 2) - philo->time_to_sleep - 900);
+		((philo->time_to_eat * 2) - philo->time_to_sleep - TIME_REDUCE);
 	}
 	else if (philo->time_to_sleep == philo->time_to_eat)
 	{
 		philo->time_to_think = 0;
 		if (philo->time_to_eat > 0)
-			philo->time_to_double_think = (philo->time_to_eat - 900);
+			philo->time_to_double_think = (philo->time_to_eat - TIME_REDUCE);
 		else
 			philo->time_to_double_think = 0;
 	}
@@ -113,7 +113,7 @@ int	calculus_time_to_think(t_prog *prog, t_philo *philo)
 	{
 		if (philo->time_to_eat > philo->time_to_sleep)
 			philo->time_to_think = \
-			((philo->time_to_eat - philo->time_to_sleep) - 900);
+			((philo->time_to_eat - philo->time_to_sleep) - TIME_REDUCE);
 		else
 			philo->time_to_think = 0;
 		philo->time_to_double_think = -1;

@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 14:34:29 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/28 17:06:00 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@
 # include <semaphore.h>
 # include <fcntl.h>
 
-# define  SEM_FORK_NAME "/sem_fork"
-# define  SEM_PRINT_NAME "/sem_print"
+# define SEM_FORK_NAME "/sem_fork"
+# define SEM_PRINT_NAME "/sem_print"
+# define TIME_REDUCE 900
+# define MAX_INT_LENGHT 12
 
 typedef struct s_philo
 {
@@ -86,54 +88,49 @@ typedef struct s_prog
 int			check_arguments(t_prog *prog, int argc, char **argv);
 int			extra_checks(t_prog *prog);
 
-//Cleaning functions
-void		clean_prog(t_prog *prog, char *message);
-void		unlink_sems(void);
-
-//Num functions	return
+//Basic utils functions
+char		*custom_itoa(int num);
 long int	custom_atol(char *str_number);
 int			is_even(int nbr);
 int			is_num_digit(char c);
 int			string_len(char *s);
 
+//Cleaning functions
+void		clean_prog(t_prog *prog, char *message);
+void		unlink_sems(void);
+
+//Process philo functions
+void		*philo_process(t_prog *prog, int i);
+int			philo_init(t_prog *prog, t_philo *philo, int i);
+
+//Process utils functions
+void		custom_write(t_philo *philo, char *message, t_prog *prog);
+int			exit_gracefully(t_prog *prog, t_philo *philo);
+void		*lone_philo(t_prog *prog, int i);
+void		children_close_sems(t_prog *prog, t_philo *philo);
+
 //Program utils
 int			param_attribution(t_prog *prog, int nbr, int arg);
 int			print_error(char *message);
-void		*print_error_pointer(char *message);
-void		*ft_calloc(size_t nmemb, size_t size);
+char		*ft_strjoin(char const *prefix, char const *suffix);
 
 //Start philos functions
+int			philo_variables_init(t_prog *prog, t_philo *philo, int i);
 int			calculus_wait_one_remaining(t_prog *prog, t_philo *philo);
 int			start_position(t_prog *prog, t_philo *philo);
-// int			grab_fork_order(t_prog *prog, t_philo *philo, int i);
-int			philo_variables_init(t_prog *prog, t_philo *philo, int i);
 int			calculus_time_to_think(t_prog *prog, t_philo *philo);
 
 //Start variables functions
 int			start_variables(t_prog *prog);
+int			semaphore_init(sem_t **semaphore, char *name, int value);
 
-//Philo thread functions
-void		*philo_process(t_prog *prog, int i);
+//Thread death functions
 void		*death_thread(void *data);
-
-//Other threads functions
-void		*lone_philo(t_prog *prog, int i);
-
-//Thread utils functions
-void		custom_write(t_philo *philo, char *message, t_prog *prog);
 
 //Time functions
 long int	timestamp(long int start_time, struct timeval tmp_time);
 long int	time_in_microseconds(void);
 long int	program_start_time(t_prog *prog);
 void		delay_to_start(t_philo *philo);
-
-//bonus stuff
-char*		custom_itoa(int num);
-int			exit_gracefully(t_prog *prog, t_philo *philo);
-int			init_thread(pthread_t *thread, void *(*func) (void *), void *data);
-void		children_open_sems(t_prog *prog, t_philo *philo);
-void		children_close_sems(t_prog *prog, t_philo *philo);
-int			philo_init(t_prog *prog, t_philo *philo, int i);
 
 #endif
