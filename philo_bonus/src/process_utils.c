@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 16:00:18 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 17:17:19 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/29 10:17:35 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ void	*lone_philo(t_prog *prog, int i)
 	custom_write(philo, "is thinking\n", prog);
 	usleep(philo->time_to_die);
 	custom_write(philo, "died\n", prog);
-	sem_close(prog->sems.printing);
+	children_close_sems(prog, philo);
+	sem_unlink(philo->sem_name_last_meal);
+	if (philo->sem_name_last_meal)
+		free(philo->sem_name_last_meal);
 	exit(EXIT_FAILURE);
 }

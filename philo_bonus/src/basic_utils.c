@@ -6,43 +6,11 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 15:02:42 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 17:11:09 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/29 10:11:03 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-char	*custom_itoa(int num)
-{
-	int		start;
-	int		i;
-	int		end;
-	char	tmp;
-	char	*str;
-
-	i = 0;
-	str = (NULL);
-	str = malloc(MAX_INT_LENGHT);
-	if (!str)
-		return (NULL);
-	while (num > 0)
-	{
-		str[i++] = num % 10 + '0';
-		num /= 10;
-	}
-	str[i] = '\0';
-	start = 0;
-	end = i - 1;
-	while (start < end)
-	{
-		tmp = str[start];
-		str[start] = str[end];
-		str[end] = tmp;
-		start++;
-		end--;
-	}
-	return (str);
-}
 
 long int	custom_atol(char *str_number)
 {

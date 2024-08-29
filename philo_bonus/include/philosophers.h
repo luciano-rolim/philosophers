@@ -6,7 +6,7 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/28 13:23:09 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 17:06:00 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/29 09:58:37 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct s_sems
 typedef struct s_prog
 {
 	t_params		params;
+	pid_t			pids[250];
 	t_sems			sems;
 	pthread_t		*threads;
 	t_philo			philo;

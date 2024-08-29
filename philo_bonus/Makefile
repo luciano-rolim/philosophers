@@ -6,7 +6,7 @@
 #    By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/10 12:12:03 by lmeneghe          #+#    #+#              #
-#    Updated: 2024/08/28 16:41:52 by lmeneghe         ###   ########.fr        #
+#    Updated: 2024/08/29 10:34:10 by lmeneghe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,12 @@ NAME            = philo_bonus
 
 # Compiler and Flags
 CC              = gcc
-CFLAGS          = #-Wall -Wextra -Werror -pthread -O3
+CFLAGS          = -Wall -Wextra -Werror -pthread -O3
 
 # Source Files
 SRC_FILES       =	src/arg_check_extra.c src/arg_check.c src/basic_utils.c \
-					src/cleaning.c src/main.c src/process_philos.c \
-					src/process_utils.c src/program_utils.c \
+					src/basic_utils_extra.c src/cleaning.c src/main.c \
+					src/process_philos.c src/process_utils.c src/program_utils.c \
 					src/start_philos.c src/start_variables.c \
 					src/thread_death.c src/time.c
 

@@ -6,37 +6,19 @@
 /*   By: lmeneghe <lmeneghe@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 09:51:37 by lmeneghe          #+#    #+#             */
-/*   Updated: 2024/08/28 17:08:16 by lmeneghe         ###   ########.fr       */
+/*   Updated: 2024/08/29 10:37:06 by lmeneghe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-static int	start_program(t_prog *prog)
+static void	wait_children_return(t_prog *prog)
 {
+	int		running_children;
 	int		i;
 	int		status;
-	int		running_children;
 	pid_t	pid;
-	pid_t	pids[prog->params.nbr_philos];
 
-	i = 0;
-	prog->strt_tm_micros = program_start_time(prog);
-	while (i < prog->params.nbr_philos)
-	{
-		pids[i] = fork();
-		if (pids[i] == -1)
-			return (print_error("Error on fork function\n"));
-		else if (pids[i] == 0)
-		{
-			if (prog->params.nbr_philos == 1)
-				lone_philo(prog, i);
-			else
-				philo_process(prog, i);
-		}
-		else
-			i++;
-	}
 	i = 0;
 	running_children = prog->params.nbr_philos;
 	while (running_children != 0)
@@ -47,8 +29,8 @@ static int	start_program(t_prog *prog)
 		{
 			while (i < prog->params.nbr_philos)
 			{
-				if (pids[i] != pid)
-					kill(pids[i], SIGKILL);
+				if (prog->pids[i] != pid)
+					kill(prog->pids[i], SIGKILL);
 				i++;
 			}
 			break ;
@@ -56,6 +38,30 @@ static int	start_program(t_prog *prog)
 		else
 			running_children--;
 	}
+}
+
+static int	start_program(t_prog *prog)
+{
+	int		i;
+
+	i = 0;
+	prog->strt_tm_micros = program_start_time(prog);
+	while (i < prog->params.nbr_philos)
+	{
+		prog->pids[i] = fork();
+		if (prog->pids[i] == -1)
+			return (print_error("Error on fork function\n"));
+		else if (prog->pids[i] == 0)
+		{
+			if (prog->params.nbr_philos == 1)
+				lone_philo(prog, i);
+			else
+				philo_process(prog, i);
+		}
+		else
+			i++;
+	}
+	wait_children_return(prog);
 	return (1);
 }
 
